@@ -4,17 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.kaneki.xchatmessageview.adapter.XMessageAdapter;
-import com.kaneki.xchatmessageview.holder.XViewHolder;
-import com.kaneki.xchatmessageview.view.XChatMessageView;
+import com.kaneki.xchatmessageview.XMessageAdapter;
+import com.kaneki.xchatmessageview.XViewHolder;
+import com.kaneki.xchatmessageview.XChatMessageView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private XChatMessageView xChatMessageView;
+    private Button buttonAdd;
+    private HomeAdapter homeAdapter;
+
     private ArrayList<Message> mDatas;
     private int[] mIds = {R.layout.msg_list_item_to_text, R.layout.msg_list_item_from_text};
 
@@ -25,8 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
         initData();
         xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_view);
-        xChatMessageView.setMessageAdapter(new HomeAdapter(this, mIds, mDatas));
+        buttonAdd = (Button) findViewById(R.id.btn_add);
 
+        homeAdapter = new HomeAdapter(this, mIds, mDatas);
+
+        xChatMessageView.setMessageAdapter(homeAdapter);
+
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                xChatMessageView.addNewMessage(new Message(0, "new"));
+            }
+        });
     }
 
     protected void initData() {

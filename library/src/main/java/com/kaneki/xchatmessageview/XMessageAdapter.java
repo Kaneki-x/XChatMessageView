@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.adapter;
+package com.kaneki.xchatmessageview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kaneki.xchatmessageview.holder.XViewHolder;
-
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -33,6 +33,13 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
 
     public abstract XViewHolder<T> getViewHolder(View itemView, int viewType);
 
+    void addNewMessage(T t) {
+        int lastIndex = mDatas.size() - 1;
+        mDatas.add(t);
+        notifyItemInserted(mDatas.size() - 1);
+        notifyItemRangeChanged(lastIndex, mDatas.size() - 1);
+    }
+
     @Override
     public int getItemViewType(int position) {
         return getItemViewType(mDatas.get(position));
@@ -52,4 +59,5 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     public int getItemCount() {
         return mDatas.size();
     }
+
 }
