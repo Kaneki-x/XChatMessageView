@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -19,6 +17,7 @@ import java.util.ArrayList;
 public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolder<T>> {
 
     private Context context;
+    private LayoutInflater layoutInflater;
 
     private ArrayList<T> mDatas;
     private int[] mIds;
@@ -27,6 +26,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         this.context = context;
         this.mIds = mIds;
         this.mDatas = mDatas;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     public abstract int getItemViewType(T t);
@@ -47,7 +47,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
 
     @Override
     public XViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(LayoutInflater.from(context).inflate(mIds[viewType], parent, false), viewType);
+        return getViewHolder(layoutInflater.inflate(mIds[viewType], parent, false), viewType);
     }
 
     @Override
