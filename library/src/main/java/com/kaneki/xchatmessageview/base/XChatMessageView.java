@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview;
+package com.kaneki.xchatmessageview.base;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ public class XChatMessageView extends ViewGroup {
 
     private Context context;
     private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
 
     private XMessageAdapter messageAdpter;
 
@@ -124,7 +125,7 @@ public class XChatMessageView extends ViewGroup {
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT);
         recyclerView.setLayoutParams(layoutParams);
         recyclerView.setBackgroundColor(Color.parseColor("#f5f5f5"));
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -142,8 +143,19 @@ public class XChatMessageView extends ViewGroup {
     }
 
     @SuppressWarnings("unchecked")
-    public void addNewMessage(Object object) {
-        messageAdpter.addNewMessage(object);
+    public int getMessageItemPosition(Object object) {
+       return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition((View) object);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addMessageAtLast(Object object) {
+        messageAdpter.addMessageAtLast(object);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void reomveMessage(Object object) {
+        int pos = linearLayoutManager.getPosition((View) object);
+        messageAdpter.removeMessageAtPosition(pos);
     }
 }

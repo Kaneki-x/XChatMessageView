@@ -1,15 +1,17 @@
 package com.kaneki.sample;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.kaneki.xchatmessageview.XMessageAdapter;
-import com.kaneki.xchatmessageview.XViewHolder;
-import com.kaneki.xchatmessageview.XChatMessageView;
+import com.kaneki.xchatmessageview.base.XMessageAdapter;
+import com.kaneki.xchatmessageview.base.XViewHolder;
+import com.kaneki.xchatmessageview.base.XChatMessageView;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xChatMessageView.addNewMessage(new Message(0, "new"));
+                xChatMessageView.addMessageAtLast(new Message(0, "new"));
             }
         });
     }
@@ -96,9 +98,35 @@ public class MainActivity extends AppCompatActivity {
     class SendTextViewHolder extends XViewHolder<Message> {
         TextView textView;
 
-        public SendTextViewHolder(View itemView) {
+        public SendTextViewHolder(final View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_to_content);
+            textView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final AlertDialog.Builder normalDialog =
+                            new AlertDialog.Builder(MainActivity.this);
+                    normalDialog.setTitle("删除");
+                    normalDialog.setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //...To-do
+                                    xChatMessageView.reomveMessage(itemView);
+                                }
+                            });
+                    normalDialog.setNegativeButton("关闭",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //...To-do
+                                }
+                            });
+                    // 显示
+                    normalDialog.show();
+                    return true;
+                }
+            });
         }
 
         @Override

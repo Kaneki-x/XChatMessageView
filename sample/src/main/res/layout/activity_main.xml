@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="发送"/>
 
-    <com.kaneki.xchatmessageview.XChatMessageView
+    <com.kaneki.xchatmessageview.base.XChatMessageView
         android:id="@+id/xcmv_view"
         android:background="#333333"
         android:layout_width="match_parent"
