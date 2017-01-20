@@ -69,7 +69,8 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     }
 
     void removeMessageAtPosition(int pos) {
-        mDatas.remove(pos - 1);
+        pos = isNeedLoadMore ? pos - 1 : pos;
+        mDatas.remove(pos);
         notifyItemRemoved(pos);
         // 加入如下代码保证position的位置正确性
         if (pos != mDatas.size() - 1) {
