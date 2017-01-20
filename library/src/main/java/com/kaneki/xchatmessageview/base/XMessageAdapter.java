@@ -11,6 +11,7 @@ import com.kaneki.xchatmessageview.holder.XHeaderHolder;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yueqian
@@ -28,6 +29,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     private ArrayList<T> mDatas;
     private int[] mIds;
     private int headerLayoutId;
+    private boolean isNeedLoadMore;
 
     public XMessageAdapter (Context context, int[] mIds, ArrayList<T> mDatas) {
         this.context = context;
@@ -35,6 +37,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         this.mDatas = mDatas;
         this.layoutInflater = LayoutInflater.from(context);
         this.headerLayoutId = R.layout.x_default_header;
+        this.isNeedLoadMore = true;
     }
 
     public abstract int getItemViewType(T t);
@@ -45,24 +48,28 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         this.headerLayoutId = headerLayoutId;
     }
 
-    void addMessageAtLast(T t) {
-        int lastIndex = mDatas.size() - 1;
-        mDatas.add(t);
-        notifyItemInserted(mDatas.size() - 1);
-        notifyItemRangeChanged(lastIndex, mDatas.size() - 1);
+    void setNeedLoadMore(boolean needLoadMore) {
+        isNeedLoadMore = needLoadMore;
     }
 
-    void addMessageAtPosition(int pos, T t) {
-        mDatas.add(pos, t);
-        notifyItemInserted(pos);
-        // 加入如下代码保证position的位置正确性
-        if (pos != mDatas.size() - 1) {
-            notifyItemRangeChanged(pos, mDatas.size() - pos);
-        }
+    boolean isNeedLoadMore() {
+        return isNeedLoadMore;
+    }
+
+    void addMessageAtLast(T t) {
+        mDatas.add(t);
+        notifyItemInserted(mDatas.size());
+    }
+
+    void addMoreMessageAtFirst(List<T> tList) {
+        mDatas.addAll(0, tList);
+        notifyItemRangeInserted(0, tList.size());
+        notifyItemRangeChanged(tList.size(), getItemCount() - tList.size());
+
     }
 
     void removeMessageAtPosition(int pos) {
-        mDatas.remove(pos);
+        mDatas.remove(pos - 1);
         notifyItemRemoved(pos);
         // 加入如下代码保证position的位置正确性
         if (pos != mDatas.size() - 1) {
@@ -72,9 +79,12 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0)
-            return TYPE_LOADING_HEADER;
-        return getItemViewType(mDatas.get(position - 1));
+        if (isNeedLoadMore) {
+            if (position == 0)
+                return TYPE_LOADING_HEADER;
+            return getItemViewType(mDatas.get(position - 1));
+        } else
+            return getItemViewType(mDatas.get(position));
     }
 
     @Override
@@ -87,15 +97,18 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
 
     @Override
     public void onBindViewHolder(XViewHolder<T> holder, int position) {
-        if (position == 0)
-            holder.bindView(null);
-        else
-            holder.bindView(mDatas.get(position - 1));
+        if (isNeedLoadMore) {
+            if (position == 0)
+                holder.bindView(null);
+            else
+                holder.bindView(mDatas.get(position - 1));
+        } else
+            holder.bindView(mDatas.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mDatas.size() + 1;
+        return isNeedLoadMore ? mDatas.size() + 1 : mDatas.size();
     }
 
 }

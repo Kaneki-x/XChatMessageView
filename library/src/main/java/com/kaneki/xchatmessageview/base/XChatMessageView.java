@@ -8,6 +8,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
+
+import java.util.List;
+
 /**
  * @author yueqian
  * @Desctription
@@ -19,8 +23,12 @@ public class XChatMessageView extends ViewGroup {
     private Context context;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-
     private XMessageAdapter messageAdpter;
+    private OnLoadMoreListener onLoadMoreListener;
+
+    private boolean isLoadMore = false;
+    private int lastPosition = 0;
+    private int lastOffset = 0;
 
     public XChatMessageView(Context context) {
         this(context, null);
@@ -34,6 +42,7 @@ public class XChatMessageView extends ViewGroup {
         super(context, attrs, defStyleAttr);
         this.context = context;
         initView();
+        initListener();
     }
 
     /**
@@ -142,7 +151,22 @@ public class XChatMessageView extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                
+                if (messageAdpter.isNeedLoadMore()) {
+                    int pos = linearLayoutManager.findFirstVisibleItemPosition();
+
+                    if (pos == 0 && !isLoadMore) {
+                        //获取headerView高度
+                        View headerView = linearLayoutManager.getChildAt(0);
+                        //获取可视的第一个view
+                        View firstView = linearLayoutManager.getChildAt(1);
+                        //获取与该view的顶部的偏移量
+                        lastOffset = firstView.getTop() + headerView.getHeight();
+                        //得到该View的数组位置
+                        lastPosition = linearLayoutManager.getPosition(headerView);
+                        isLoadMore = true;
+                        onLoadMoreListener.onLoadMore();
+                    }
+                }
             }
         });
     }
@@ -152,8 +176,16 @@ public class XChatMessageView extends ViewGroup {
         recyclerView.setAdapter(messageAdapter);
     }
 
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
+    }
+
     public XMessageAdapter getMessageAdpter() {
         return messageAdpter;
+    }
+
+    public void setIsNeedLoadMore(boolean isNeedLoadMore) {
+        messageAdpter.setNeedLoadMore(isNeedLoadMore);
     }
 
     @SuppressWarnings("unchecked")
@@ -165,6 +197,14 @@ public class XChatMessageView extends ViewGroup {
     public void addMessageAtLast(Object object) {
         messageAdpter.addMessageAtLast(object);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addMoreMessageAtFirst(List<Object> objectList) {
+        messageAdpter.addMoreMessageAtFirst(objectList);
+        if (!messageAdpter.isNeedLoadMore())
+            linearLayoutManager.scrollToPositionWithOffset(lastPosition + objectList.size(), lastOffset);
+        isLoadMore = false;
     }
 
     @SuppressWarnings("unchecked")

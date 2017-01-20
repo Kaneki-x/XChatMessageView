@@ -12,14 +12,19 @@ import android.widget.TextView;
 import com.kaneki.xchatmessageview.base.XMessageAdapter;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
 import com.kaneki.xchatmessageview.base.XChatMessageView;
+import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
     private XChatMessageView xChatMessageView;
     private Button buttonAdd;
     private HomeAdapter homeAdapter;
+
+    int i = 0;
 
     private ArrayList<Message> mDatas;
     private int[] mIds = {R.layout.msg_list_item_to_text, R.layout.msg_list_item_from_text};
@@ -37,10 +42,42 @@ public class MainActivity extends AppCompatActivity {
 
         xChatMessageView.setMessageAdapter(homeAdapter);
 
+        xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                            final ArrayList<Object> list = new ArrayList<>();
+
+                            for (int i = 0; i< 10; i++) {
+                                if (i % 2 == 0)
+                                    list.add(new Message(0, "previous--" + i));
+                                else
+                                    list.add(new Message(1, "previous--" + i));
+                            }
+
+                            xChatMessageView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    xChatMessageView.setIsNeedLoadMore(false);
+                                    xChatMessageView.addMoreMessageAtFirst(list);
+                                }
+                            });
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }).start();
+            }
+        });
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xChatMessageView.addMessageAtLast(new Message(0, "new"));
+                xChatMessageView.addMessageAtLast(new Message(0, "new" + i++));
             }
         });
     }
