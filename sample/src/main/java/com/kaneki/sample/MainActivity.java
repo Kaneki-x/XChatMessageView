@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kaneki.xchatmessageview.base.XMessageAdapter;
-import com.kaneki.xchatmessageview.base.XViewHolder;
+import com.kaneki.xchatmessageview.holder.XViewHolder;
 import com.kaneki.xchatmessageview.base.XChatMessageView;
 
 import java.util.ArrayList;

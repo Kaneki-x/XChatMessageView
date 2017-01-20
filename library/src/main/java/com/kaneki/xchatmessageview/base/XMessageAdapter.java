@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kaneki.xchatmessageview.R;
+import com.kaneki.xchatmessageview.holder.XHeaderHolder;
+import com.kaneki.xchatmessageview.holder.XViewHolder;
 
 import java.util.ArrayList;
 
@@ -79,7 +81,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     @SuppressWarnings("unchecked")
     public XViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_LOADING_HEADER)
-            return (XViewHolder<T>) new DefaultHeader(layoutInflater.inflate(headerLayoutId, parent, false));
+            return (XViewHolder<T>) new XHeaderHolder(layoutInflater.inflate(headerLayoutId, parent, false));
         return getViewHolder(layoutInflater.inflate(mIds[viewType], parent, false), viewType);
     }
 

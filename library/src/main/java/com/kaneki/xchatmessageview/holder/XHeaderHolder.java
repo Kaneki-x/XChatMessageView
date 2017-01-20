@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.base;
+package com.kaneki.xchatmessageview.holder;
 
 import android.view.View;
 
@@ -8,9 +8,9 @@ import android.view.View;
  * @date 2017/1/19
  * @email yueqian@mogujie.com
  */
-public class DefaultHeader extends XViewHolder<Object> {
+public class XHeaderHolder extends XViewHolder<Object> {
 
-    public DefaultHeader(View itemView) {
+    public XHeaderHolder(View itemView) {
         super(itemView);
     }
 

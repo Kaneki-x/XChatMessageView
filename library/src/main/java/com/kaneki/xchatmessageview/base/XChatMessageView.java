@@ -133,6 +133,20 @@ public class XChatMessageView extends ViewGroup {
         addView(recyclerView);
     }
 
+    private void initListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                
+            }
+        });
+    }
+
     public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
         recyclerView.setAdapter(messageAdapter);

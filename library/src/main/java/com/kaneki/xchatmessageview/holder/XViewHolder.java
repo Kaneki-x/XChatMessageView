@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.base;
+package com.kaneki.xchatmessageview.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
