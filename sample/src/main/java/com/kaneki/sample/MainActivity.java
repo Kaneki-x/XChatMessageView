@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private XChatMessageView xChatMessageView;
+    private XChatMessageView<Message> xChatMessageView;
     private Button buttonAdd;
     private HomeAdapter homeAdapter;
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            final ArrayList<Object> list = new ArrayList<>();
+                            final ArrayList<Message> list = new ArrayList<>();
 
                             for (int i = 0; i< 10; i++) {
                                 if (i % 2 == 0)

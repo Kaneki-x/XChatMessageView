@@ -18,7 +18,7 @@ import java.util.List;
  * @date 2017/1/16
  * @email yueqian@mogujie.com
  */
-public class XChatMessageView extends ViewGroup {
+public class XChatMessageView<T> extends ViewGroup {
 
     private Context context;
     private RecyclerView recyclerView;
@@ -188,28 +188,26 @@ public class XChatMessageView extends ViewGroup {
         messageAdpter.setNeedLoadMore(isNeedLoadMore);
     }
 
-    @SuppressWarnings("unchecked")
-    public int getMessageItemPosition(Object object) {
-       return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition((View) object);
+    public int getMessageItemPosition(View view) {
+       return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition(view);
     }
 
     @SuppressWarnings("unchecked")
-    public void addMessageAtLast(Object object) {
-        messageAdpter.addMessageAtLast(object);
+    public void addMessageAtLast(T t) {
+        messageAdpter.addMessageAtLast(t);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
     @SuppressWarnings("unchecked")
-    public void addMoreMessageAtFirst(List<Object> objectList) {
-        messageAdpter.addMoreMessageAtFirst(objectList);
+    public void addMoreMessageAtFirst(List<T> tList) {
+        messageAdpter.addMoreMessageAtFirst(tList);
         if (!messageAdpter.isNeedLoadMore())
-            linearLayoutManager.scrollToPositionWithOffset(lastPosition + objectList.size(), lastOffset);
+            linearLayoutManager.scrollToPositionWithOffset(lastPosition + tList.size(), lastOffset);
         isLoadMore = false;
     }
 
-    @SuppressWarnings("unchecked")
-    public void reomveMessage(Object object) {
-        int pos = linearLayoutManager.getPosition((View) object);
+    public void reomveMessage(View view) {
+        int pos = linearLayoutManager.getPosition(view);
         messageAdpter.removeMessageAtPosition(pos);
     }
 }
