@@ -58,23 +58,23 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
 
     void addMessageAtLast(T t) {
         mDatas.add(t);
-        notifyItemInserted(mDatas.size());
+        notifyItemInserted(getItemCount());
     }
 
     void addMoreMessageAtFirst(List<T> tList) {
         mDatas.addAll(0, tList);
-        notifyItemRangeInserted(0, tList.size());
-        notifyItemRangeChanged(tList.size(), getItemCount() - tList.size());
+        notifyItemRangeInserted(isNeedLoadMore ? 1 : 0, tList.size());
+        notifyItemRangeChanged(tList.size() + (isNeedLoadMore ? 1 : 0), getItemCount() - tList.size());
 
     }
 
     void removeMessageAtPosition(int pos) {
-        pos = isNeedLoadMore ? pos - 1 : pos;
-        mDatas.remove(pos);
+        int realIndex = isNeedLoadMore ? pos - 1 : pos;
+        mDatas.remove(realIndex);
         notifyItemRemoved(pos);
         // 加入如下代码保证position的位置正确性
-        if (pos != mDatas.size() - 1) {
-            notifyItemRangeChanged(pos, mDatas.size() - pos);
+        if (realIndex != getItemCount() - 1) {
+            notifyItemRangeChanged(realIndex, getItemCount() - realIndex);
         }
     }
 

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                             xChatMessageView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    xChatMessageView.setIsNeedLoadMore(false);
+                                    //xChatMessageView.setIsNeedLoadMore(false);
                                     xChatMessageView.addMoreMessageAtFirst(list);
                                 }
                             });
