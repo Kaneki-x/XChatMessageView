@@ -136,7 +136,6 @@ public class XChatMessageView<T> extends ViewGroup {
         recyclerView.setBackgroundColor(Color.parseColor("#f5f5f5"));
         linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         addView(recyclerView);
@@ -151,29 +150,47 @@ public class XChatMessageView<T> extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (messageAdpter.isNeedLoadMore()) {
-                    int pos = linearLayoutManager.findFirstVisibleItemPosition();
-
-                    if (pos == 0 && !isLoadMore) {
-                        //获取headerView高度
-                        View headerView = linearLayoutManager.getChildAt(0);
-                        //获取可视的第一个view
-                        View firstView = linearLayoutManager.getChildAt(1);
-                        //获取与该view的顶部的偏移量
-                        lastOffset = firstView.getTop() + headerView.getHeight();
-                        //得到该View的数组位置
-                        lastPosition = linearLayoutManager.getPosition(headerView);
-                        isLoadMore = true;
-                        onLoadMoreListener.onLoadMore();
-                    }
-                }
+                if (messageAdpter.isNeedLoadMore())
+                    saveCurrent();
             }
         });
+    }
+
+    private void saveCurrent() {
+        int pos = linearLayoutManager.findFirstVisibleItemPosition();
+        if (pos == 0 && !isLoadMore) {
+            //获取headerView高度
+            View headerView = linearLayoutManager.getChildAt(0);
+            //获取可视的第一个view
+            View firstView = linearLayoutManager.getChildAt(1);
+            if (headerView != null && firstView != null) {
+                //获取与该view的顶部的偏移量
+                lastOffset = firstView.getTop() + headerView.getHeight();
+                //得到该View的数组位置
+                lastPosition = linearLayoutManager.getPosition(headerView);
+                isLoadMore = true;
+                onLoadMoreListener.onLoadMore();
+            }
+        } else {
+            //获取headerView高度
+            View currentView = linearLayoutManager.getChildAt(pos);
+            if (currentView != null) {
+                //获取与该view的顶部的偏移量
+                lastOffset = currentView.getTop();
+                //得到该View的数组位置
+                lastPosition = linearLayoutManager.getPosition(currentView);
+            }
+        }
+    }
+
+    private void resumeSave(int changeSize) {
+        linearLayoutManager.scrollToPositionWithOffset(lastPosition + changeSize, lastOffset);
     }
 
     public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
         recyclerView.setAdapter(messageAdapter);
+        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
@@ -189,7 +206,7 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     public int getMessageItemPosition(View view) {
-       return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition(view);
+        return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition(view);
     }
 
     @SuppressWarnings("unchecked")
@@ -199,15 +216,33 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     @SuppressWarnings("unchecked")
+    public void addMoreMessageAtLast(List<T> tList) {
+        messageAdpter.addMoreMessageAtLast(tList);
+        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+    }
+
+    @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
         messageAdpter.addMoreMessageAtFirst(tList);
         if (!messageAdpter.isNeedLoadMore())
-            linearLayoutManager.scrollToPositionWithOffset(lastPosition + tList.size(), lastOffset);
+            resumeSave(tList.size());
         isLoadMore = false;
     }
 
     public void reomveMessage(View view) {
         int pos = linearLayoutManager.getPosition(view);
         messageAdpter.removeMessageAtPosition(pos);
+    }
+
+    public void scrollToBottom() {
+        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+    }
+
+    public void saveCurrentStatus() {
+        saveCurrent();
+    }
+
+    public void resumeSaveStatus() {
+        resumeSave(0);
     }
 }

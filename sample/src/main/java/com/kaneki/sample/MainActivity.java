@@ -2,6 +2,7 @@ package com.kaneki.sample;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             xChatMessageView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //xChatMessageView.setIsNeedLoadMore(false);
+                                    xChatMessageView.setIsNeedLoadMore(false);
                                     xChatMessageView.addMoreMessageAtFirst(list);
                                 }
                             });
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xChatMessageView.addMessageAtLast(new Message(0, "new" + i++));
+                xChatMessageView.addMessageAtLast(new Message(0, "new " + i++));
             }
         });
     }

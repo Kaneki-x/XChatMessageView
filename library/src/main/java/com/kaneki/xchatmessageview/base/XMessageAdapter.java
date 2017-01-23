@@ -61,6 +61,11 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         notifyItemInserted(getItemCount());
     }
 
+    void addMoreMessageAtLast(List<T> tList) {
+        mDatas.addAll(tList);
+        notifyItemInserted(getItemCount());
+    }
+
     void addMoreMessageAtFirst(List<T> tList) {
         mDatas.addAll(0, tList);
         notifyItemRangeInserted(isNeedLoadMore ? 1 : 0, tList.size());
