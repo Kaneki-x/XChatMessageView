@@ -2,7 +2,6 @@ package com.kaneki.sample;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +15,6 @@ import com.kaneki.xchatmessageview.base.XChatMessageView;
 import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
