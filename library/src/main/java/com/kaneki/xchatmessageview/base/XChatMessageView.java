@@ -187,6 +187,10 @@ public class XChatMessageView<T> extends ViewGroup {
         linearLayoutManager.scrollToPositionWithOffset(lastPosition + changeSize, lastOffset);
     }
 
+    /**
+     * set message adapter, the adpter should extend XMessageAdapter.
+     * @param messageAdapter
+     */
     public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
         recyclerView.setAdapter(messageAdapter);
