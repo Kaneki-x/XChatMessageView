@@ -197,6 +197,11 @@ public class XChatMessageView<T> extends ViewGroup {
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
+    /**
+     * set message load more listener, it calls when the header is visibile and only
+     * calls once.
+     * @param onLoadMoreListener
+     */
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
