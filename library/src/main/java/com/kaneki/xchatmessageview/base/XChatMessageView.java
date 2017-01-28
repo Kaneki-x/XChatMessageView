@@ -199,17 +199,25 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * set message load more listener, it calls when the header is visibile and only
-     * calls once.
+     * calls once when trigger.
      * @param onLoadMoreListener
      */
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
+    /**
+     * get message adpater, it may return null if setMessageAdapter method whit null set.
+     * @return
+     */
     public XMessageAdapter getMessageAdpter() {
         return messageAdpter;
     }
 
+    /**
+     * toggle the load more header, it should be call before the datas change.
+     * @param isNeedLoadMore
+     */
     public void setIsNeedLoadMore(boolean isNeedLoadMore) {
         messageAdpter.setNeedLoadMore(isNeedLoadMore);
     }
