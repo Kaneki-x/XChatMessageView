@@ -222,6 +222,11 @@ public class XChatMessageView<T> extends ViewGroup {
         messageAdpter.setNeedLoadMore(isNeedLoadMore);
     }
 
+    /**
+     * return the view's position on the XChatMessageView, the view should come from the XViewHolder.
+     * @param view
+     * @return
+     */
     public int getMessageItemPosition(View view) {
         return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition(view);
     }
