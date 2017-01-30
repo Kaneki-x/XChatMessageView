@@ -231,6 +231,11 @@ public class XChatMessageView<T> extends ViewGroup {
         return linearLayoutManager == null ? -1 : linearLayoutManager.getPosition(view);
     }
 
+    /**
+     * add a new message at the last of the XChatMessageView, the message should as same as the T of th
+     * XViewHolder or XMessageAdapter.
+     * @param t
+     */
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
         messageAdpter.addMessageAtLast(t);
