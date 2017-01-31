@@ -232,7 +232,7 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     /**
-     * add a new message at the last of the XChatMessageView, the message should as same as the T of th
+     * add a new message at the last of the XChatMessageView, the message should as same as the T of the
      * XViewHolder or XMessageAdapter.
      * @param t
      */
@@ -242,6 +242,11 @@ public class XChatMessageView<T> extends ViewGroup {
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
+    /**
+     * add messages at the last of the XChatMessageView, the message should as same as the T of the
+     * XViewHolder or XMessageAdapter.
+     * @param tList
+     */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtLast(List<T> tList) {
         messageAdpter.addMoreMessageAtLast(tList);
