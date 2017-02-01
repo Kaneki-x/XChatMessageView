@@ -96,7 +96,12 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     @SuppressWarnings("unchecked")
     public XViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_LOADING_HEADER)
-            return (XViewHolder<T>) new XHeaderHolder(layoutInflater.inflate(headerLayoutId, parent, false));
+            return (XViewHolder<T>) new XHeaderHolder(layoutInflater.inflate(headerLayoutId, parent, false)) {
+                @Override
+                public void bindHeaderView(Object object) {
+
+                }
+            };
         return getViewHolder(layoutInflater.inflate(mIds[viewType], parent, false), viewType);
     }
 

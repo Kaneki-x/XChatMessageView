@@ -8,7 +8,7 @@ import android.view.View;
  * @date 2017/1/19
  * @email yueqian@mogujie.com
  */
-public class XHeaderHolder extends XViewHolder<Object> {
+public abstract class XHeaderHolder extends XViewHolder<Object> {
 
     public XHeaderHolder(View itemView) {
         super(itemView);
@@ -16,6 +16,8 @@ public class XHeaderHolder extends XViewHolder<Object> {
 
     @Override
     public void bindView(Object object) {
-
+        bindHeaderView(object);
     }
+
+    public abstract void bindHeaderView(Object object);
 }
