@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class XChatMessageView<T> extends ViewGroup {
 
+    private static final String DEFAULT_BACKGROUND_COLOR = "#f5f5f5";
+
     private Context context;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -131,9 +133,8 @@ public class XChatMessageView<T> extends ViewGroup {
 
     private void initView() {
         recyclerView = new RecyclerView(context);
-        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT);
-        recyclerView.setLayoutParams(layoutParams);
-        recyclerView.setBackgroundColor(Color.parseColor("#f5f5f5"));
+        recyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
+        recyclerView.setBackgroundColor(Color.parseColor(DEFAULT_BACKGROUND_COLOR));
         linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -253,6 +254,11 @@ public class XChatMessageView<T> extends ViewGroup {
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
+    /**
+     * add messages at the first of the XChatMessageView, the message should as same as the T of the
+     * XViewHolder or XMessageAdapter.
+     * @param tList
+     */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
         messageAdpter.addMoreMessageAtFirst(tList);

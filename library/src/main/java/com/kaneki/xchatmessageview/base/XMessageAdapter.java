@@ -70,7 +70,6 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         mDatas.addAll(0, tList);
         notifyItemRangeInserted(isNeedLoadMore ? 1 : 0, tList.size());
         notifyItemRangeChanged(tList.size() + (isNeedLoadMore ? 1 : 0), getItemCount() - tList.size());
-
     }
 
     void removeMessageAtPosition(int pos) {
