@@ -267,6 +267,10 @@ public class XChatMessageView<T> extends ViewGroup {
         isLoadMore = false;
     }
 
+    /**
+     * remove the message on the XChatMessageView, the view should come from the XViewHolder callback.
+     * @param view
+     */
     public void reomveMessage(View view) {
         int pos = linearLayoutManager.getPosition(view);
         messageAdpter.removeMessageAtPosition(pos);
