@@ -277,12 +277,15 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     /**
-     * scroll to the bottom of the XChatMessageView
+     * scroll to the bottom of the XChatMessageView.
      */
     public void scrollToBottom() {
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
+    /**
+     * save the XChatMessageView current status, you can resume the statuswhen you need.
+     */
     public void saveCurrentStatus() {
         saveCurrent();
     }
