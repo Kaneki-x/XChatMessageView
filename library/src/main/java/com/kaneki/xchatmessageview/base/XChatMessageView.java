@@ -276,6 +276,9 @@ public class XChatMessageView<T> extends ViewGroup {
         messageAdpter.removeMessageAtPosition(pos);
     }
 
+    /**
+     * scroll to the bottom of the XChatMessageView
+     */
     public void scrollToBottom() {
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
