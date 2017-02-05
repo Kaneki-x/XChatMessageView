@@ -290,6 +290,9 @@ public class XChatMessageView<T> extends ViewGroup {
         saveCurrent();
     }
 
+    /**
+     * resume the XChatMessageView's saved status.
+     */
     public void resumeSaveStatus() {
         resumeSave(0);
     }
