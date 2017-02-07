@@ -5,7 +5,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -25,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     int i = 0;
 
     private ArrayList<Message> mDatas;
-    private int[] mIds = {R.layout.msg_list_item_to_text, R.layout.msg_list_item_from_text};
+    private int[] mIds = {R.layout.msg_list_item_to_text, R.layout.msg_list_item_from_text, R.layout.test};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             else
                 mDatas.add(new Message(1, (char) i + ""));
         }
+
+        mDatas.add(new Message(2, ""));
     }
 
     class Message {
@@ -125,8 +131,41 @@ public class MainActivity extends AppCompatActivity {
                 return new SendTextViewHolder(itemView);
             else if (viewType == 1)
                 return new ReceiveTextViewHolder(itemView);
+            else if (viewType == 2)
+                return new TestViewHolder(itemView);
             else
                 return null;
+        }
+    }
+
+    class TestViewHolder extends XViewHolder<Message> {
+        RecyclerView recyclerView;
+
+        public TestViewHolder(final View itemView) {
+            super(itemView);
+            recyclerView = (RecyclerView) itemView.findViewById(R.id.rv_test);
+            recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 3));
+            recyclerView.setAdapter(new RecyclerView.Adapter() {
+                @Override
+                public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                    return new SendTextViewHolder(LayoutInflater.from(MainActivity.this).inflate(R.layout.msg_list_item_to_text, parent, false));
+                }
+
+                @Override
+                public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+                }
+
+                @Override
+                public int getItemCount() {
+                    return 3;
+                }
+            });
+        }
+
+        @Override
+        public void bindView(Message message) {
+
         }
     }
 
