@@ -25,7 +25,7 @@ public class XChatMessageView<T> extends ViewGroup {
     private Context context;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private XMessageAdapter messageAdpter;
+    private RecyclerView.Adapter messageAdpter;
     private OnLoadMoreListener onLoadMoreListener;
 
     private boolean isLoadMore = false;
@@ -151,8 +151,10 @@ public class XChatMessageView<T> extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (messageAdpter.isNeedLoadMore())
-                    saveCurrent();
+                if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+                    if (((XMessageApaterHeaderWrapper) messageAdpter).isNeedLoadMore())
+                        saveCurrent();
+                }
             }
         });
     }
@@ -211,7 +213,7 @@ public class XChatMessageView<T> extends ViewGroup {
      * get message adpater, it may return null if setMessageAdapter method whit null set.
      * @return
      */
-    public XMessageAdapter getMessageAdpter() {
+    public RecyclerView.Adapter getMessageAdpter() {
         return messageAdpter;
     }
 
@@ -220,7 +222,9 @@ public class XChatMessageView<T> extends ViewGroup {
      * @param isNeedLoadMore
      */
     public void setIsNeedLoadMore(boolean isNeedLoadMore) {
-        messageAdpter.setNeedLoadMore(isNeedLoadMore);
+        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+            ((XMessageApaterHeaderWrapper) messageAdpter).setNeedLoadMore(isNeedLoadMore);
+        }
     }
 
     /**
@@ -239,7 +243,11 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
-        messageAdpter.addMessageAtLast(t);
+        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+            ((XMessageApaterHeaderWrapper) messageAdpter).addMessageAtLast(t);
+        } else {
+            ((XMessageAdapter) messageAdpter).addMessageAtLast(t);
+        }
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
@@ -250,7 +258,11 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtLast(List<T> tList) {
-        messageAdpter.addMoreMessageAtLast(tList);
+        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+            ((XMessageApaterHeaderWrapper) messageAdpter).addMoreMessageAtLast(tList);
+        } else {
+            ((XMessageAdapter) messageAdpter).addMoreMessageAtLast(tList);
+        }
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
@@ -261,9 +273,13 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
-        messageAdpter.addMoreMessageAtFirst(tList);
-        if (!messageAdpter.isNeedLoadMore())
-            resumeSave(tList.size());
+        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+            ((XMessageApaterHeaderWrapper) messageAdpter).addMoreMessageAtFirst(tList);
+            if (!((XMessageApaterHeaderWrapper) messageAdpter).isNeedLoadMore())
+                resumeSave(tList.size());
+        } else {
+            ((XMessageAdapter) messageAdpter).addMoreMessageAtFirst(tList, false);
+        }
         isLoadMore = false;
     }
 
@@ -272,8 +288,12 @@ public class XChatMessageView<T> extends ViewGroup {
      * @param view
      */
     public void reomveMessage(View view) {
-        int pos = linearLayoutManager.getPosition(view);
-        messageAdpter.removeMessageAtPosition(pos);
+        int position = linearLayoutManager.getPosition(view);
+        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
+            ((XMessageApaterHeaderWrapper) messageAdpter).removeMessageAtPosition(position);
+        } else {
+            ((XMessageAdapter) messageAdpter).removeMessageAtPosition(position, false);
+        }
     }
 
     /**
