@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2017/2/8
  * @email yueqian@mogujie.com
  */
-public abstract class XMessageApaterHeaderWrapper<T> extends RecyclerView.Adapter<XViewHolder<T>> {
+public class XMessageApaterHeaderWrapper<T> extends RecyclerView.Adapter<XViewHolder<T>> {
 
     private static final int TYPE_LOADING_HEADER = 1000;
 
@@ -25,10 +25,6 @@ public abstract class XMessageApaterHeaderWrapper<T> extends RecyclerView.Adapte
     private int headerLayoutId;
     private XHeaderHolder xHeaderHolder;
     private boolean isNeedLoadMore;
-
-    public abstract int getItemViewType(T t);
-
-    public abstract XViewHolder<T> getViewHolder(View itemView, int viewType);
 
     void setNeedLoadMore(boolean needLoadMore) {
         isNeedLoadMore = needLoadMore;

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.kaneki.xchatmessageview.base.XMessageAdapter;
+import com.kaneki.xchatmessageview.base.XMessageApaterHeaderWrapper;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
 import com.kaneki.xchatmessageview.base.XChatMessageView;
 import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         homeAdapter = new HomeAdapter(this, mIds, mDatas);
 
-        xChatMessageView.setMessageAdapter(homeAdapter);
+        xChatMessageView.setMessageAdapter(new XMessageApaterHeaderWrapper<>(homeAdapter));
 
         xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override

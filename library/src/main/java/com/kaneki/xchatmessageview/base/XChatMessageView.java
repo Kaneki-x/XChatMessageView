@@ -194,7 +194,7 @@ public class XChatMessageView<T> extends ViewGroup {
      * set message adapter, the adpter should extend XMessageAdapter.
      * @param messageAdapter
      */
-    public void setMessageAdapter(XMessageAdapter messageAdapter) {
+    public void setMessageAdapter(RecyclerView.Adapter messageAdapter) {
         this.messageAdpter = messageAdapter;
         recyclerView.setAdapter(messageAdapter);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
