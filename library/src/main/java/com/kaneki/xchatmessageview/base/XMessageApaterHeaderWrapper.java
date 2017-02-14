@@ -2,7 +2,6 @@ package com.kaneki.xchatmessageview.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.kaneki.xchatmessageview.R;
@@ -56,17 +55,19 @@ public class XMessageApaterHeaderWrapper<T> extends RecyclerView.Adapter<XViewHo
     public XMessageApaterHeaderWrapper(XMessageAdapter<T> xMessageAdapter) {
         this.xMessageAdapter = xMessageAdapter;
         this.headerLayoutId = R.layout.x_default_header;
+        this.isNeedLoadMore = true;
     }
 
     public XMessageApaterHeaderWrapper(XMessageAdapter<T> xMessageAdapter, int headerLayoutId, XHeaderHolder xHeaderHolder) {
         this.xMessageAdapter = xMessageAdapter;
         this.headerLayoutId = headerLayoutId;
         this.xHeaderHolder = xHeaderHolder;
+        this.isNeedLoadMore = true;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? TYPE_LOADING_HEADER : xMessageAdapter.getItemViewType(position);
+        return isNeedLoadMore ? (position == 0 ? TYPE_LOADING_HEADER : xMessageAdapter.getItemViewType(position - 1)) : xMessageAdapter.getItemViewType(position);
     }
 
     @SuppressWarnings("unchecked")
@@ -86,11 +87,11 @@ public class XMessageApaterHeaderWrapper<T> extends RecyclerView.Adapter<XViewHo
     public void onBindViewHolder(XViewHolder<T> holder, int position) {
         if (isNeedLoadMore) {
             if (position == 0)
-                xMessageAdapter.biinHeaderViewByHeader((XHeaderHolder) holder, position);
+                xMessageAdapter.bindHeaderViewByHeader((XHeaderHolder) holder, position);
             else
-                xMessageAdapter.biinViewByHeader(holder, position - 1);
+                xMessageAdapter.bindViewByHeader(holder, position - 1);
         } else
-            xMessageAdapter.biinViewByHeader(holder, position);
+            xMessageAdapter.bindViewByHeader(holder, position);
     }
 
     @Override

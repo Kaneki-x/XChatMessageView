@@ -67,11 +67,11 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         return context;
     }
 
-    void biinViewByHeader(XViewHolder<T> holder, int position) {
+    void bindViewByHeader(XViewHolder<T> holder, int position) {
         holder.bindView(mDatas.get(position));
     }
 
-    void biinHeaderViewByHeader(XHeaderHolder holder, int position) {
+    void bindHeaderViewByHeader(XHeaderHolder holder, int position) {
         holder.bindView(mDatas.get(position));
     }
 
@@ -95,5 +95,4 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     public int getItemCount() {
         return mDatas.size();
     }
-
 }
