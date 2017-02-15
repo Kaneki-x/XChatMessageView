@@ -1,7 +1,5 @@
 package com.kaneki.xchatmessageview.listener;
 
-import com.kaneki.xchatmessageview.holder.XViewHolder;
-
 /**
  * @author yueqian
  * @Desctription
