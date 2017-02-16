@@ -27,10 +27,31 @@ public class XChatMessageView<T> extends ViewGroup {
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView.Adapter messageAdpter;
     private OnLoadMoreListener onLoadMoreListener;
+    private View mEmptyView;
 
     private boolean isLoadMore = false;
     private int lastPosition = 0;
     private int lastOffset = 0;
+
+    private RecyclerView.AdapterDataObserver mObserver = new RecyclerView.AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            RecyclerView.Adapter adapter = getMessageAdpter();
+            if(adapter.getItemCount() == 0){
+                mEmptyView.setVisibility(VISIBLE);
+                XChatMessageView.this.setVisibility(GONE);
+            } else{
+                mEmptyView.setVisibility(GONE);
+                XChatMessageView.this.setVisibility(VISIBLE);
+            }
+        }
+
+        public void onItemRangeChanged(int positionStart, int itemCount) {onChanged();}
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {onChanged();}
+        public void onItemRangeRemoved(int positionStart, int itemCount) {onChanged();}
+        public void onItemRangeInserted(int positionStart, int itemCount) {onChanged();}
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {onChanged();}
+    };
 
     public XChatMessageView(Context context) {
         this(context, null);
@@ -190,14 +211,21 @@ public class XChatMessageView<T> extends ViewGroup {
         linearLayoutManager.scrollToPositionWithOffset(lastPosition + changeSize, lastOffset);
     }
 
+    public void setEmptyView(View view){
+        this.mEmptyView = view;
+        ((ViewGroup)this.getRootView()).addView(mEmptyView); //加入主界面布局
+    }
+
     /**
      * set message adapter, the adpter should extend XMessageAdapter.
      * @param messageAdapter
      */
     public void setMessageAdapter(RecyclerView.Adapter messageAdapter) {
         this.messageAdpter = messageAdapter;
+        this.messageAdpter.registerAdapterDataObserver(mObserver);
         recyclerView.setAdapter(messageAdapter);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+        mObserver.onChanged();
     }
 
     /**
@@ -316,4 +344,5 @@ public class XChatMessageView<T> extends ViewGroup {
     public void resumeSaveStatus() {
         resumeSave(0);
     }
+
 }
