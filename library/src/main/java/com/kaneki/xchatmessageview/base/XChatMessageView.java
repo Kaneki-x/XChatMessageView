@@ -36,13 +36,15 @@ public class XChatMessageView<T> extends ViewGroup {
     private RecyclerView.AdapterDataObserver mObserver = new RecyclerView.AdapterDataObserver() {
         @Override
         public void onChanged() {
-            RecyclerView.Adapter adapter = getMessageAdpter();
-            if(adapter.getItemCount() == 0){
-                mEmptyView.setVisibility(VISIBLE);
-                XChatMessageView.this.setVisibility(GONE);
-            } else{
-                mEmptyView.setVisibility(GONE);
-                XChatMessageView.this.setVisibility(VISIBLE);
+            if (mEmptyView != null) {
+                RecyclerView.Adapter adapter = getMessageAdpter();
+                if (adapter.getItemCount() == 0) {
+                    mEmptyView.setVisibility(VISIBLE);
+                    XChatMessageView.this.setVisibility(GONE);
+                } else {
+                    mEmptyView.setVisibility(GONE);
+                    XChatMessageView.this.setVisibility(VISIBLE);
+                }
             }
         }
 
