@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kaneki.xchatmessageview.anno.XItemLayoutResResolver;
 import com.kaneki.xchatmessageview.holder.XHeaderHolder;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
 
@@ -26,10 +27,10 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     private ArrayList<T> mDatas;
     private int[] mIds;
 
-    public XMessageAdapter (Context context, int[] mIds, ArrayList<T> mDatas) {
+    public XMessageAdapter (Context context, ArrayList<T> mDatas) {
         this.context = context;
-        this.mIds = mIds;
         this.mDatas = mDatas;
+        this.mIds = XItemLayoutResResolver.resolve(this);
         this.layoutInflater = LayoutInflater.from(context);
     }
 

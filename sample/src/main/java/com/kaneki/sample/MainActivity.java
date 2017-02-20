@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.kaneki.xchatmessageview.anno.XItemLayoutRes;
 import com.kaneki.xchatmessageview.base.XMessageAdapter;
 import com.kaneki.xchatmessageview.base.XMessageApaterHeaderWrapper;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_view);
         buttonAdd = (Button) findViewById(R.id.btn_add);
 
-        homeAdapter = new HomeAdapter(this, mIds, mDatas);
+        homeAdapter = new HomeAdapter(this, mDatas);
 
         xChatMessageView.setMessageAdapter(new XMessageApaterHeaderWrapper<>(homeAdapter));
 
@@ -109,10 +110,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @XItemLayoutRes({
+            R.layout.msg_list_item_to_text,
+            R.layout.msg_list_item_from_text
+    })
     class HomeAdapter extends XMessageAdapter<Message> {
 
-        public HomeAdapter(Context context, int[] mIds, ArrayList<Message> mDatas) {
-            super(context, mIds, mDatas);
+        public HomeAdapter(Context context, ArrayList<Message> mDatas) {
+            super(context, mDatas);
         }
 
         @Override
