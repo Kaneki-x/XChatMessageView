@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kaneki.xchatmessageview.R;
 import com.kaneki.xchatmessageview.anno.XItemLayoutResResolver;
 import com.kaneki.xchatmessageview.holder.XHeaderHolder;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
@@ -21,22 +22,40 @@ import java.util.List;
  */
 public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolder<T>> {
 
+    private static final int TYPE_LOADING_HEADER = 1000;
+
     private Context context;
     private LayoutInflater layoutInflater;
 
     private ArrayList<T> mDatas;
     private int[] mIds;
+    private int headerLayoutId;
+    private boolean isNeedLoadMore;
 
     public XMessageAdapter (Context context, ArrayList<T> mDatas) {
         this.context = context;
         this.mDatas = mDatas;
         this.mIds = XItemLayoutResResolver.resolve(this);
         this.layoutInflater = LayoutInflater.from(context);
+        this.headerLayoutId = R.layout.x_default_header;
+        this.isNeedLoadMore = true;
     }
 
     public abstract int getItemViewType(T t);
 
     public abstract XViewHolder<T> getViewHolder(View itemView, int viewType);
+
+    public void setHeaderLayoutId(int headerLayoutId) {
+        this.headerLayoutId = headerLayoutId;
+    }
+
+    void setNeedLoadMore(boolean needLoadMore) {
+        isNeedLoadMore = needLoadMore;
+    }
+
+    boolean isNeedLoadMore() {
+        return isNeedLoadMore;
+    }
 
     void addMessageAtLast(T t) {
         mDatas.add(t);
@@ -48,52 +67,58 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         notifyItemInserted(getItemCount());
     }
 
-    void addMoreMessageAtFirst(List<T> tList, boolean isNeedLoadMore) {
+    void addMoreMessageAtFirst(List<T> tList) {
         mDatas.addAll(0, tList);
         notifyItemRangeInserted(isNeedLoadMore ? 1 : 0, tList.size());
         notifyItemRangeChanged(tList.size() + (isNeedLoadMore ? 1 : 0), getItemCount() - tList.size());
     }
 
-    void removeMessageAtPosition(int position, boolean isNeedLoadMore) {
-        int realIndex = isNeedLoadMore ? position - 1 : position;
+    void removeMessageAtPosition(int pos) {
+        int realIndex = isNeedLoadMore ? pos - 1 : pos;
         mDatas.remove(realIndex);
-        notifyItemRemoved(position);
+        notifyItemRemoved(pos);
         // 加入如下代码保证position的位置正确性
         if (realIndex != getItemCount() - 1) {
             notifyItemRangeChanged(realIndex, getItemCount() - realIndex);
         }
     }
 
-    Context getContext() {
-        return context;
-    }
-
-    void bindViewByHeader(XViewHolder<T> holder, int position) {
-        holder.bindView(mDatas.get(position));
-    }
-
-    void bindHeaderViewByHeader(XHeaderHolder holder, int position) {
-        holder.bindView(mDatas.get(position));
-    }
-
     @Override
     public int getItemViewType(int position) {
-        return getItemViewType(mDatas.get(position));
+        if (isNeedLoadMore) {
+            if (position == 0)
+                return TYPE_LOADING_HEADER;
+            return getItemViewType(mDatas.get(position - 1));
+        } else
+            return getItemViewType(mDatas.get(position));
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public XViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_LOADING_HEADER)
+            return (XViewHolder<T>) new XHeaderHolder(layoutInflater.inflate(headerLayoutId, parent, false)) {
+                @Override
+                public void bindHeaderView(Object object) {
+
+                }
+            };
         return getViewHolder(layoutInflater.inflate(mIds[viewType], parent, false), viewType);
     }
 
     @Override
     public void onBindViewHolder(XViewHolder<T> holder, int position) {
-        holder.bindView(mDatas.get(position));
+        if (isNeedLoadMore) {
+            if (position == 0)
+                holder.bindView(null);
+            else
+                holder.bindView(mDatas.get(position - 1));
+        } else
+            holder.bindView(mDatas.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return isNeedLoadMore ? mDatas.size() + 1 : mDatas.size();
     }
 }

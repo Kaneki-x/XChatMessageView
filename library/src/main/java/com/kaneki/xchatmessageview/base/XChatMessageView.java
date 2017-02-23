@@ -25,7 +25,7 @@ public class XChatMessageView<T> extends ViewGroup {
     private Context context;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private RecyclerView.Adapter messageAdpter;
+    private XMessageAdapter messageAdpter;
     private OnLoadMoreListener onLoadMoreListener;
     private View mEmptyView;
 
@@ -174,10 +174,8 @@ public class XChatMessageView<T> extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-                    if (((XMessageApaterHeaderWrapper) messageAdpter).isNeedLoadMore())
-                        saveCurrent();
-                }
+                if (messageAdpter.isNeedLoadMore())
+                    saveCurrent();
             }
         });
     }
@@ -222,7 +220,7 @@ public class XChatMessageView<T> extends ViewGroup {
      * set message adapter, the adpter should extend XMessageAdapter.
      * @param messageAdapter
      */
-    public void setMessageAdapter(RecyclerView.Adapter messageAdapter) {
+    public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
         this.messageAdpter.registerAdapterDataObserver(mObserver);
         recyclerView.setAdapter(messageAdapter);
@@ -252,9 +250,7 @@ public class XChatMessageView<T> extends ViewGroup {
      * @param isNeedLoadMore
      */
     public void setIsNeedLoadMore(boolean isNeedLoadMore) {
-        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-            ((XMessageApaterHeaderWrapper) messageAdpter).setNeedLoadMore(isNeedLoadMore);
-        }
+        messageAdpter.setNeedLoadMore(isNeedLoadMore);
     }
 
     /**
@@ -273,11 +269,7 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
-        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-            ((XMessageApaterHeaderWrapper) messageAdpter).addMessageAtLast(t);
-        } else {
-            ((XMessageAdapter) messageAdpter).addMessageAtLast(t);
-        }
+        messageAdpter.addMessageAtLast(t);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
@@ -288,11 +280,7 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtLast(List<T> tList) {
-        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-            ((XMessageApaterHeaderWrapper) messageAdpter).addMoreMessageAtLast(tList);
-        } else {
-            ((XMessageAdapter) messageAdpter).addMoreMessageAtLast(tList);
-        }
+        messageAdpter.addMoreMessageAtLast(tList);
         recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
@@ -303,13 +291,7 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
-        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-            ((XMessageApaterHeaderWrapper) messageAdpter).addMoreMessageAtFirst(tList);
-            if (!((XMessageApaterHeaderWrapper) messageAdpter).isNeedLoadMore())
-                resumeSave(tList.size());
-        } else {
-            ((XMessageAdapter) messageAdpter).addMoreMessageAtFirst(tList, false);
-        }
+        messageAdpter.addMoreMessageAtFirst(tList);
         isLoadMore = false;
     }
 
@@ -319,11 +301,7 @@ public class XChatMessageView<T> extends ViewGroup {
      */
     public void reomveMessage(View view) {
         int position = linearLayoutManager.getPosition(view);
-        if (messageAdpter instanceof XMessageApaterHeaderWrapper) {
-            ((XMessageApaterHeaderWrapper) messageAdpter).removeMessageAtPosition(position);
-        } else {
-            ((XMessageAdapter) messageAdpter).removeMessageAtPosition(position, false);
-        }
+        messageAdpter.removeMessageAtPosition(position);
     }
 
     /**

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.kaneki.xchatmessageview.anno.XItemLayoutRes;
 import com.kaneki.xchatmessageview.base.XMessageAdapter;
-import com.kaneki.xchatmessageview.base.XMessageApaterHeaderWrapper;
 import com.kaneki.xchatmessageview.holder.XViewHolder;
 import com.kaneki.xchatmessageview.base.XChatMessageView;
 import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
@@ -27,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     int i = 0;
 
     private ArrayList<Message> mDatas;
-    private int[] mIds = {R.layout.msg_list_item_to_text, R.layout.msg_list_item_from_text};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         homeAdapter = new HomeAdapter(this, mDatas);
 
-        xChatMessageView.setMessageAdapter(new XMessageApaterHeaderWrapper<>(homeAdapter));
+        xChatMessageView.setMessageAdapter(homeAdapter);
 
         xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
