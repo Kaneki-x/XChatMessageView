@@ -211,6 +211,8 @@ public class XChatMessageView<T> extends ViewGroup {
         linearLayoutManager.scrollToPositionWithOffset(lastPosition + changeSize, lastOffset);
     }
 
+    /****************** public method ******************/
+
     /**
      * set the empty view , it will be show when the XChatMessageView without any Datas.
      * @param view
