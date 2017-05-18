@@ -27,33 +27,11 @@ public class XChatMessageView<T> extends ViewGroup {
     private LinearLayoutManager linearLayoutManager;
     private XMessageAdapter messageAdpter;
     private OnLoadMoreListener onLoadMoreListener;
-    private View mEmptyView;
 
-    private boolean isLoadMore = false;
+    private boolean isHeaderLoadMore = false;
+    private boolean isFooterLoadMore = false;
     private int lastPosition = 0;
     private int lastOffset = 0;
-
-    private RecyclerView.AdapterDataObserver mObserver = new RecyclerView.AdapterDataObserver() {
-        @Override
-        public void onChanged() {
-            if (mEmptyView != null) {
-                RecyclerView.Adapter adapter = getMessageAdpter();
-                if (adapter.getItemCount() == 0) {
-                    mEmptyView.setVisibility(VISIBLE);
-                    XChatMessageView.this.setVisibility(GONE);
-                } else {
-                    mEmptyView.setVisibility(GONE);
-                    XChatMessageView.this.setVisibility(VISIBLE);
-                }
-            }
-        }
-
-        public void onItemRangeChanged(int positionStart, int itemCount) {onChanged();}
-        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {onChanged();}
-        public void onItemRangeRemoved(int positionStart, int itemCount) {onChanged();}
-        public void onItemRangeInserted(int positionStart, int itemCount) {onChanged();}
-        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {onChanged();}
-    };
 
     public XChatMessageView(Context context) {
         this(context, null);
@@ -174,15 +152,16 @@ public class XChatMessageView<T> extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (messageAdpter.isNeedLoadMore())
+                if (messageAdpter.isNeedFooterLoadMore() || messageAdpter.isNeedHeaderLoadMore())
                     saveCurrent();
             }
         });
     }
 
     private void saveCurrent() {
-        int pos = linearLayoutManager.findFirstVisibleItemPosition();
-        if (pos == 0 && !isLoadMore) {
+        int firstPos = linearLayoutManager.findFirstVisibleItemPosition();
+        int lastPos = linearLayoutManager.findLastVisibleItemPosition();
+        if (firstPos == 0 && !isHeaderLoadMore && messageAdpter.isNeedHeaderLoadMore()) {
             //获取headerView高度
             View headerView = linearLayoutManager.getChildAt(0);
             //获取可视的第一个view
@@ -192,12 +171,15 @@ public class XChatMessageView<T> extends ViewGroup {
                 lastOffset = firstView.getTop() + headerView.getHeight();
                 //得到该View的数组位置
                 lastPosition = linearLayoutManager.getPosition(headerView);
-                isLoadMore = true;
-                onLoadMoreListener.onLoadMore();
+                isHeaderLoadMore = true;
+                onLoadMoreListener.onHeaderLoadMore();
             }
+        } else if (lastPos == messageAdpter.getItemCount() - 1 && !isFooterLoadMore && messageAdpter.isNeedFooterLoadMore()){
+            isFooterLoadMore = true;
+            onLoadMoreListener.onFooterLoadMore();
         } else {
             //获取headerView高度
-            View currentView = linearLayoutManager.getChildAt(pos);
+            View currentView = linearLayoutManager.getChildAt(firstPos);
             if (currentView != null) {
                 //获取与该view的顶部的偏移量
                 lastOffset = currentView.getTop();
@@ -214,24 +196,12 @@ public class XChatMessageView<T> extends ViewGroup {
     /****************** public method ******************/
 
     /**
-     * set the empty view , it will be show when the XChatMessageView without any Datas.
-     * @param view
-     */
-    public void setEmptyView(View view){
-        this.mEmptyView = view;
-        ((ViewGroup)this.getRootView()).addView(mEmptyView); //加入主界面布局
-    }
-
-    /**
      * set message adapter, the adpter should extend XMessageAdapter.
      * @param messageAdapter
      */
     public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
-        this.messageAdpter.registerAdapterDataObserver(mObserver);
         recyclerView.setAdapter(messageAdapter);
-        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
-        mObserver.onChanged();
     }
 
     /**
@@ -253,10 +223,18 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * toggle the load more header, it should be call before the datas change.
-     * @param isNeedLoadMore
+     * @param isNeedHeaderLoadMore
      */
-    public void setIsNeedLoadMore(boolean isNeedLoadMore) {
-        messageAdpter.setNeedLoadMore(isNeedLoadMore);
+    public void setIsNeedHeaderLoadMore(boolean isNeedHeaderLoadMore) {
+        messageAdpter.setNeedHeaderLoadMore(isNeedHeaderLoadMore);
+    }
+
+    /**
+     * toggle the load more footer, it should be call before the datas change.
+     * @param isNeedFooterLoadMore
+     */
+    public void setIsNeedFooterLoadMore(boolean isNeedFooterLoadMore) {
+        messageAdpter.setNeedFooterLoadMore(isNeedFooterLoadMore);
     }
 
     /**
@@ -276,7 +254,6 @@ public class XChatMessageView<T> extends ViewGroup {
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
         messageAdpter.addMessageAtLast(t);
-        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
     }
 
     /**
@@ -287,7 +264,7 @@ public class XChatMessageView<T> extends ViewGroup {
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtLast(List<T> tList) {
         messageAdpter.addMoreMessageAtLast(tList);
-        recyclerView.scrollToPosition(messageAdpter.getItemCount() - 1);
+        isFooterLoadMore = false;
     }
 
     /**
@@ -298,8 +275,10 @@ public class XChatMessageView<T> extends ViewGroup {
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
         messageAdpter.addMoreMessageAtFirst(tList);
-        isLoadMore = false;
+        isHeaderLoadMore = false;
     }
+
+
 
     /**
      * remove the message on the XChatMessageView, the view should come from the XViewHolder callback.

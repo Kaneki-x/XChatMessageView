@@ -8,16 +8,16 @@ import android.view.View;
  * @date 2017/1/19
  * @email yueqian@mogujie.com
  */
-public abstract class XHeaderHolder extends XViewHolder<Object> {
+public abstract class XMoreHolder extends XViewHolder<Object> {
 
-    public XHeaderHolder(View itemView) {
+    public XMoreHolder(View itemView) {
         super(itemView);
     }
 
     @Override
     public void bindView(Object object) {
-        bindHeaderView(object);
+        bindMoreView(object);
     }
 
-    public abstract void bindHeaderView(Object object);
+    public abstract void bindMoreView(Object object);
 }

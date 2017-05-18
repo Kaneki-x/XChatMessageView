@@ -39,10 +39,11 @@ public class MainActivity extends AppCompatActivity {
         homeAdapter = new HomeAdapter(this, mDatas);
 
         xChatMessageView.setMessageAdapter(homeAdapter);
+        //xChatMessageView.scrollToBottom();
 
         xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
-            public void onLoadMore() {
+            public void onHeaderLoadMore() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -60,8 +61,38 @@ public class MainActivity extends AppCompatActivity {
                             xChatMessageView.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    xChatMessageView.setIsNeedLoadMore(false);
+                                    xChatMessageView.setIsNeedHeaderLoadMore(false);
                                     xChatMessageView.addMoreMessageAtFirst(list);
+                                }
+                            });
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onFooterLoadMore() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                            final ArrayList<Message> list = new ArrayList<>();
+
+                            for (int i = 0; i< 10; i++) {
+                                if (i % 2 == 0)
+                                    list.add(new Message(0, "next--" + i));
+                                else
+                                    list.add(new Message(1, "next--" + i));
+                            }
+
+                            xChatMessageView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    xChatMessageView.setIsNeedFooterLoadMore(false);
+                                    xChatMessageView.addMoreMessageAtLast(list);
                                 }
                             });
                         } catch (Exception e) {
@@ -76,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 xChatMessageView.addMessageAtLast(new Message(0, "new " + i++));
+                xChatMessageView.scrollToBottom();
             }
         });
     }

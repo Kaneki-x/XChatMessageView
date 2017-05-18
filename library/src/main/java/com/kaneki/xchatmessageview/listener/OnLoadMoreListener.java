@@ -7,5 +7,14 @@ package com.kaneki.xchatmessageview.listener;
  * @email yueqian@mogujie.com
  */
 public interface OnLoadMoreListener {
-    void onLoadMore();
+
+    /**
+     * 头部加载更多
+     */
+    void onHeaderLoadMore();
+
+    /**
+     * 底部加载更多
+     */
+    void onFooterLoadMore();
 }
