@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.holder;
+package me.kaneki.xchatmessageview.holder;
 
 import android.view.View;
 

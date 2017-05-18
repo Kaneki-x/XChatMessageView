@@ -1,4 +1,4 @@
-package com.kaneki.sample;
+package me.kaneki.sample;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.kaneki.xchatmessageview.anno.XItemLayoutRes;
-import com.kaneki.xchatmessageview.base.XMessageAdapter;
-import com.kaneki.xchatmessageview.holder.XViewHolder;
-import com.kaneki.xchatmessageview.base.XChatMessageView;
-import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
+import me.kaneki.xchatmessageview.anno.XItemLayoutRes;
+import me.kaneki.xchatmessageview.base.XMessageAdapter;
+import me.kaneki.xchatmessageview.holder.XViewHolder;
+import me.kaneki.xchatmessageview.base.XChatMessageView;
+import me.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 

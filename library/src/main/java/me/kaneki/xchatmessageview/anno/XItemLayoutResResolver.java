@@ -1,8 +1,8 @@
-package com.kaneki.xchatmessageview.anno;
+package me.kaneki.xchatmessageview.anno;
 
 import android.support.annotation.NonNull;
 
-import com.kaneki.xchatmessageview.base.XMessageAdapter;
+import me.kaneki.xchatmessageview.base.XMessageAdapter;
 
 /**
  * {@link XItemLayoutRes}注解解析器<br/>

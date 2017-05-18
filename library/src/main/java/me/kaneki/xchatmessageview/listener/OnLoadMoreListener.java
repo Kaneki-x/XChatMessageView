@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.listener;
+package me.kaneki.xchatmessageview.listener;
 
 /**
  * @author yueqian

@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.base;
+package me.kaneki.xchatmessageview.base;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kaneki.xchatmessageview.listener.OnLoadMoreListener;
+import me.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
 import java.util.List;
 

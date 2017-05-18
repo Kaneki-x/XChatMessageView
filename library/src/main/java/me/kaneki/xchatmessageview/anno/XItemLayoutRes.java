@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.anno;
+package me.kaneki.xchatmessageview.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

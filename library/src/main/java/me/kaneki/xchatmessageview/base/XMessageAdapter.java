@@ -1,4 +1,4 @@
-package com.kaneki.xchatmessageview.base;
+package me.kaneki.xchatmessageview.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kaneki.xchatmessageview.R;
-import com.kaneki.xchatmessageview.anno.XItemLayoutResResolver;
-import com.kaneki.xchatmessageview.holder.XMoreHolder;
-import com.kaneki.xchatmessageview.holder.XViewHolder;
+import me.kaneki.xchatmessageview.anno.XItemLayoutResResolver;
+import me.kaneki.xchatmessageview.holder.XMoreHolder;
+import me.kaneki.xchatmessageview.holder.XViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,8 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         this.mDatas = mDatas;
         this.mIds = XItemLayoutResResolver.resolve(this);
         this.layoutInflater = LayoutInflater.from(context);
-        this.headerLayoutId = R.layout.x_default_load;
-        this.footerLayoutId = R.layout.x_default_load;
+        this.headerLayoutId = me.kaneki.xchatmessageview.R.layout.x_default_load;
+        this.footerLayoutId = me.kaneki.xchatmessageview.R.layout.x_default_load;
         this.isNeedHeaderLoadMore = true;
         this.isNeedFooterLoadMore = true;
     }
