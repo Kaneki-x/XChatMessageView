@@ -1,17 +1,13 @@
-package me.kaneki.sample;
+package me.kaneki.sample.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import me.kaneki.xchatmessageview.anno.XItemLayoutRes;
-import me.kaneki.xchatmessageview.base.XMessageAdapter;
-import me.kaneki.xchatmessageview.holder.XViewHolder;
+import me.kaneki.sample.R;
+import me.kaneki.sample.adapter.SampleAdapter;
+import me.kaneki.sample.entity.Message;
 import me.kaneki.xchatmessageview.base.XChatMessageView;
 import me.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
@@ -21,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private XChatMessageView<Message> xChatMessageView;
     private Button buttonAdd;
-    private HomeAdapter homeAdapter;
+    private SampleAdapter sampleAdapter;
 
     int i = 0;
 
@@ -36,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
         xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_view);
         buttonAdd = (Button) findViewById(R.id.btn_add);
 
-        homeAdapter = new HomeAdapter(this, mDatas);
+        sampleAdapter = new SampleAdapter(getApplicationContext(), mDatas);
 
-        xChatMessageView.setMessageAdapter(homeAdapter);
+        xChatMessageView.setMessageAdapter(sampleAdapter);
+        xChatMessageView.setIsNeedFooterLoadMore(false);
+        xChatMessageView.setIsNeedHeaderLoadMore(false);
         //xChatMessageView.scrollToBottom();
 
         xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -108,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 xChatMessageView.addMessageAtLast(new Message(0, "new " + i++));
                 xChatMessageView.scrollToBottom();
+
+                if (i == 10)
+                    xChatMessageView.setIsNeedHeaderLoadMore(true);
             }
         });
     }
@@ -119,105 +120,6 @@ public class MainActivity extends AppCompatActivity {
                 mDatas.add(new Message(0, (char) i + ""));
             else
                 mDatas.add(new Message(1, (char) i + ""));
-        }
-    }
-
-    class Message {
-        int type;
-        String content;
-
-        public Message(int type, String content) {
-            this.type = type;
-            this.content = content;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public String getContent() {
-            return content;
-        }
-    }
-
-    @XItemLayoutRes({
-            R.layout.msg_list_item_to_text,
-            R.layout.msg_list_item_from_text
-    })
-    class HomeAdapter extends XMessageAdapter<Message> {
-
-        public HomeAdapter(Context context, ArrayList<Message> mDatas) {
-            super(context, mDatas);
-        }
-
-        @Override
-        public int getItemViewType(Message message) {
-            return message.getType();
-        }
-
-        @Override
-        public XViewHolder<Message> getViewHolder(View itemView, int viewType) {
-            if (viewType == 0)
-                return new SendTextViewHolder(itemView);
-            else if (viewType == 1)
-                return new ReceiveTextViewHolder(itemView);
-            else
-                return null;
-        }
-    }
-
-    class SendTextViewHolder extends XViewHolder<Message> {
-        TextView textView;
-
-        public SendTextViewHolder(final View itemView) {
-            super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_to_content);
-            textView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    final AlertDialog.Builder normalDialog =
-                            new AlertDialog.Builder(MainActivity.this);
-                    normalDialog.setTitle("删除");
-                    normalDialog.setPositiveButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //...To-do
-                                    xChatMessageView.reomveMessage(itemView);
-                                }
-                            });
-                    normalDialog.setNegativeButton("关闭",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //...To-do
-                                }
-                            });
-                    // 显示
-                    normalDialog.show();
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public void bindView(Message message) {
-            textView.setText(message.getContent());
-        }
-    }
-
-    class ReceiveTextViewHolder extends XViewHolder<Message> {
-        TextView textView;
-
-
-        public ReceiveTextViewHolder(View itemView) {
-            super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_from_content);
-        }
-
-        @Override
-        public void bindView(Message message) {
-            textView.setText(message.getContent());
         }
     }
 }

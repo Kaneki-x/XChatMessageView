@@ -278,8 +278,6 @@ public class XChatMessageView<T> extends ViewGroup {
         isHeaderLoadMore = false;
     }
 
-
-
     /**
      * remove the message on the XChatMessageView, the view should come from the XViewHolder callback.
      * @param view

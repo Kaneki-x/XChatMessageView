@@ -49,6 +49,7 @@
 
     <TextView
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="3.5dp"
         android:layout_below="@+id/tv_msg_list_item_text_from_date"
         android:layout_toRightOf="@id/riv_msg_list_item_text_from_portrait"
         android:id="@+id/tv_msg_list_item_text_from_content"
