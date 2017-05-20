@@ -1,10 +1,15 @@
 package me.kaneki.sample.holder;
 
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import me.kaneki.sample.R;
 import me.kaneki.sample.entity.Message;
+import me.kaneki.sample.event.MessageEvent;
+import me.kaneki.sample.utils.DialogUtils;
 import me.kaneki.xchatmessageview.holder.XViewHolder;
 
 /**
@@ -14,11 +19,23 @@ import me.kaneki.xchatmessageview.holder.XViewHolder;
  * @email yueqian@mogujie.com
  */
 public class ReceiveTextViewHolder extends XViewHolder<Message> {
-    TextView textView;
+    private TextView textView;
 
-    public ReceiveTextViewHolder(View itemView) {
+    public ReceiveTextViewHolder(final View itemView) {
         super(itemView);
         textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_from_content);
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                DialogUtils.getDeleteDialog(itemView.getContext(), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EventBus.getDefault().post(new MessageEvent(itemView));
+                    }
+                }).show();
+                return true;
+            }
+        });
     }
 
     @Override

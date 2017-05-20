@@ -10,6 +10,7 @@ import me.kaneki.sample.R;
 import me.kaneki.sample.entity.Message;
 import me.kaneki.sample.event.MessageEvent;
 import me.kaneki.sample.utils.DialogUtils;
+import me.kaneki.sample.view.BubbleImageView;
 import me.kaneki.xchatmessageview.holder.XViewHolder;
 
 /**
@@ -18,13 +19,13 @@ import me.kaneki.xchatmessageview.holder.XViewHolder;
  * @date 2017/5/19
  * @email yueqian@mogujie.com
  */
-public class SendTextViewHolder extends XViewHolder<Message> {
-    private TextView textView;
+public class ReceiveImageViewHolder extends XViewHolder<Message> {
+    private BubbleImageView bubbleImageView;
 
-    public SendTextViewHolder(final View itemView) {
+    public ReceiveImageViewHolder(final View itemView) {
         super(itemView);
-        textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_to_content);
-        textView.setOnLongClickListener(new View.OnLongClickListener() {
+        bubbleImageView = (BubbleImageView) itemView.findViewById(R.id.tv_msg_list_item_img_from_content);
+        bubbleImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 DialogUtils.getDeleteDialog(itemView.getContext(), new DialogInterface.OnClickListener() {
@@ -40,6 +41,5 @@ public class SendTextViewHolder extends XViewHolder<Message> {
 
     @Override
     public void bindView(Message message) {
-        textView.setText(message.getContent());
     }
 }

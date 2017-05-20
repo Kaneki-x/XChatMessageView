@@ -7,11 +7,32 @@ package me.kaneki.sample.entity;
  * @email yueqian@mogujie.com
  */
 public class Message {
-    int type;
-    String content;
+    public static final int TYPE_TEXT = 0;
+    public static final int TYPE_IMG = 1;
 
-    public Message(int type, String content) {
+    private boolean isFrom;
+    private String content;
+    private int type;
+
+    public Message(boolean isFrom, String content, int type) {
+        this.isFrom = isFrom;
+        this.content = content;
         this.type = type;
+    }
+
+    public boolean isFrom() {
+        return isFrom;
+    }
+
+    public void setFrom(boolean from) {
+        isFrom = from;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
         this.content = content;
     }
 
@@ -19,7 +40,7 @@ public class Message {
         return type;
     }
 
-    public String getContent() {
-        return content;
+    public void setType(int type) {
+        this.type = type;
     }
 }

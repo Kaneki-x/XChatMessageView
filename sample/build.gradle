@@ -9,7 +9,7 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.pic_test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -27,6 +27,8 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.google.code.gson:gson:2.7'
     //compile 'me.kaneki.xchatmessageview:library:0.0.1'
     compile project(path: ':library')
 }

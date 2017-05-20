@@ -1,10 +1,11 @@
-package me.kaneki.xchatmessageview.base;
+package me.kaneki.xchatmessageview;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,7 +25,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     private Context context;
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
+    private XLinearLayoutManager linearLayoutManager;
     private XMessageAdapter messageAdpter;
     private OnLoadMoreListener onLoadMoreListener;
 
@@ -133,10 +134,11 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     private void initView() {
-        recyclerView = new RecyclerView(context);
+        recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(
+                R.layout.x_recycler_view, this, false);
         recyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
         recyclerView.setBackgroundColor(Color.parseColor(DEFAULT_BACKGROUND_COLOR));
-        linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager = new XLinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -152,40 +154,30 @@ public class XChatMessageView<T> extends ViewGroup {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (messageAdpter.isNeedFooterLoadMore() || messageAdpter.isNeedHeaderLoadMore())
-                    saveCurrent();
+                int firstPos = linearLayoutManager.findFirstVisibleItemPosition();
+                int lastPos = linearLayoutManager.findLastVisibleItemPosition();
+                if (messageAdpter.isNeedFooterLoadMore() || messageAdpter.isNeedHeaderLoadMore()) {
+                    if (firstPos == 0 && !isHeaderLoadMore) {
+                        isHeaderLoadMore = true;
+                        onLoadMoreListener.onHeaderLoadMore();
+                    } else if (lastPos == messageAdpter.getItemCount() - 1 && !isFooterLoadMore) {
+                        isFooterLoadMore = true;
+                        onLoadMoreListener.onFooterLoadMore();
+                    }
+                }
             }
         });
     }
 
     private void saveCurrent() {
         int firstPos = linearLayoutManager.findFirstVisibleItemPosition();
-        int lastPos = linearLayoutManager.findLastVisibleItemPosition();
-        if (firstPos == 0 && !isHeaderLoadMore && messageAdpter.isNeedHeaderLoadMore()) {
-            //获取headerView高度
-            View headerView = linearLayoutManager.getChildAt(0);
-            //获取可视的第一个view
-            View firstView = linearLayoutManager.getChildAt(1);
-            if (headerView != null && firstView != null) {
-                //获取与该view的顶部的偏移量
-                lastOffset = firstView.getTop() + headerView.getHeight();
-                //得到该View的数组位置
-                lastPosition = linearLayoutManager.getPosition(headerView);
-                isHeaderLoadMore = true;
-                onLoadMoreListener.onHeaderLoadMore();
-            }
-        } else if (lastPos == messageAdpter.getItemCount() - 1 && !isFooterLoadMore && messageAdpter.isNeedFooterLoadMore()){
-            isFooterLoadMore = true;
-            onLoadMoreListener.onFooterLoadMore();
-        } else {
-            //获取headerView高度
-            View currentView = linearLayoutManager.getChildAt(firstPos);
-            if (currentView != null) {
-                //获取与该view的顶部的偏移量
-                lastOffset = currentView.getTop();
-                //得到该View的数组位置
-                lastPosition = linearLayoutManager.getPosition(currentView);
-            }
+        //获取headerView高度
+        View currentView = linearLayoutManager.getChildAt(firstPos);
+        if (currentView != null) {
+            //获取与该view的顶部的偏移量
+            lastOffset = currentView.getTop();
+            //得到该View的数组位置
+            lastPosition = linearLayoutManager.getPosition(currentView);
         }
     }
 
@@ -254,6 +246,7 @@ public class XChatMessageView<T> extends ViewGroup {
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
         messageAdpter.addMessageAtLast(t);
+        scrollToBottom();
     }
 
     /**
@@ -276,6 +269,7 @@ public class XChatMessageView<T> extends ViewGroup {
     public void addMoreMessageAtFirst(List<T> tList) {
         messageAdpter.addMoreMessageAtFirst(tList);
         isHeaderLoadMore = false;
+        resumeSave(tList.size());
     }
 
     /**
@@ -285,6 +279,13 @@ public class XChatMessageView<T> extends ViewGroup {
     public void reomveMessage(View view) {
         int position = linearLayoutManager.getPosition(view);
         messageAdpter.removeMessageAtPosition(position);
+    }
+
+    /**
+     * remove all the message on the XChatMessageView.
+     */
+    public void removeAllMessage() {
+        messageAdpter.removeAllMessage();
     }
 
     /**

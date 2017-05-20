@@ -1,4 +1,4 @@
-package me.kaneki.xchatmessageview.base;
+package me.kaneki.xchatmessageview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +24,6 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     private static final int TYPE_LOADING_HEADER = 1000;
     private static final int TYPE_LOADING_FOOTER = 1001;
 
-    private Context context;
     private LayoutInflater layoutInflater;
 
     private ArrayList<T> mDatas;
@@ -35,14 +34,13 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     private boolean isNeedFooterLoadMore;
 
     public XMessageAdapter (Context context, ArrayList<T> mDatas) {
-        this.context = context;
         this.mDatas = mDatas;
         this.mIds = XItemLayoutResResolver.resolve(this);
         this.layoutInflater = LayoutInflater.from(context);
         this.headerLayoutId = me.kaneki.xchatmessageview.R.layout.x_default_load;
         this.footerLayoutId = me.kaneki.xchatmessageview.R.layout.x_default_load;
-        this.isNeedHeaderLoadMore = true;
-        this.isNeedFooterLoadMore = true;
+        this.isNeedHeaderLoadMore = false;
+        this.isNeedFooterLoadMore = false;
     }
 
     public abstract int getItemViewType(T t);
@@ -97,6 +95,13 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         if (realIndex != getItemCount() - 1) {
             notifyItemRangeChanged(realIndex, getItemCount() - realIndex);
         }
+    }
+
+    void removeAllMessage() {
+        isNeedFooterLoadMore = false;
+        isNeedHeaderLoadMore = false;
+        mDatas.clear();
+        notifyDataSetChanged();
     }
 
     @Override

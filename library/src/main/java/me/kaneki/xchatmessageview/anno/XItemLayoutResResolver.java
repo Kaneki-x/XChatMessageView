@@ -1,6 +1,6 @@
 package me.kaneki.xchatmessageview.anno;
 
-import me.kaneki.xchatmessageview.base.XMessageAdapter;
+import me.kaneki.xchatmessageview.XMessageAdapter;
 
 /**
  * {@link XItemLayoutRes}注解解析器<br/>

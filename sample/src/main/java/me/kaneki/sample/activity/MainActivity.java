@@ -5,121 +5,168 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import me.kaneki.sample.R;
 import me.kaneki.sample.adapter.SampleAdapter;
 import me.kaneki.sample.entity.Message;
-import me.kaneki.xchatmessageview.base.XChatMessageView;
+import me.kaneki.sample.event.MessageEvent;
+import me.kaneki.sample.utils.SharedPreferencesUtils;
+import me.kaneki.xchatmessageview.XChatMessageView;
 import me.kaneki.xchatmessageview.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final int PAGE_COUNT = 10;
+
+    private int currentPosition;
+    private int lastPosition;
 
     private XChatMessageView<Message> xChatMessageView;
-    private Button buttonAdd;
     private SampleAdapter sampleAdapter;
+    private Gson gson;
 
-    int i = 0;
+    private Button buttonRecvImg;
+    private Button buttonRecvText;
+    private Button buttonSendImg;
+    private Button buttonSendText;
 
     private ArrayList<Message> mDatas;
+    private ArrayList<Message> localDatas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
 
-        initData();
-        xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_view);
-        buttonAdd = (Button) findViewById(R.id.btn_add);
-
-        sampleAdapter = new SampleAdapter(getApplicationContext(), mDatas);
-
-        xChatMessageView.setMessageAdapter(sampleAdapter);
-        xChatMessageView.setIsNeedFooterLoadMore(false);
-        xChatMessageView.setIsNeedHeaderLoadMore(false);
-        //xChatMessageView.scrollToBottom();
-
-        xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onHeaderLoadMore() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2000);
-                            final ArrayList<Message> list = new ArrayList<>();
-
-                            for (int i = 0; i< 10; i++) {
-                                if (i % 2 == 0)
-                                    list.add(new Message(0, "previous--" + i));
-                                else
-                                    list.add(new Message(1, "previous--" + i));
-                            }
-
-                            xChatMessageView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    xChatMessageView.setIsNeedHeaderLoadMore(false);
-                                    xChatMessageView.addMoreMessageAtFirst(list);
-                                }
-                            });
-                        } catch (Exception e) {
-
-                        }
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onFooterLoadMore() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2000);
-                            final ArrayList<Message> list = new ArrayList<>();
-
-                            for (int i = 0; i< 10; i++) {
-                                if (i % 2 == 0)
-                                    list.add(new Message(0, "next--" + i));
-                                else
-                                    list.add(new Message(1, "next--" + i));
-                            }
-
-                            xChatMessageView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    xChatMessageView.setIsNeedFooterLoadMore(false);
-                                    xChatMessageView.addMoreMessageAtLast(list);
-                                }
-                            });
-                        } catch (Exception e) {
-
-                        }
-                    }
-                }).start();
-            }
-        });
-
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                xChatMessageView.addMessageAtLast(new Message(0, "new " + i++));
-                xChatMessageView.scrollToBottom();
-
-                if (i == 10)
-                    xChatMessageView.setIsNeedHeaderLoadMore(true);
-            }
-        });
+        initLocalData();
+        initView();
+        initChatMessageView();
+        addListeners();
     }
 
-    protected void initData() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferencesUtils.setParam(this, "data", gson.toJson(mDatas));
+    }
+
+    private void initLocalData() {
+        gson = new Gson();
         mDatas = new ArrayList<>();
-        for (int i = 'A'; i <= 'z'; i++) {
-            if (i % 2 == 0)
-                mDatas.add(new Message(0, (char) i + ""));
-            else
-                mDatas.add(new Message(1, (char) i + ""));
+
+        String localStr = (String) SharedPreferencesUtils.getParam(this, "data", "");
+
+        localDatas = gson.fromJson(localStr == null ? "" : localStr , new TypeToken<List<Message>>(){}.getType());
+
+        if (localDatas == null)
+            localDatas = new ArrayList<>();
+
+        mDatas.addAll(getDataFromLocal());
+    }
+
+    private void initView() {
+        xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_home);
+        buttonRecvImg = (Button) findViewById(R.id.btn_recv_img);
+        buttonSendImg = (Button) findViewById(R.id.btn_send_img);
+        buttonRecvText = (Button) findViewById(R.id.btn_recv_text);
+        buttonSendText = (Button) findViewById(R.id.btn_send_text);
+    }
+
+    private void initChatMessageView() {
+        sampleAdapter = new SampleAdapter(this, mDatas);
+
+        xChatMessageView.setMessageAdapter(sampleAdapter);
+
+        if (mDatas.size() == PAGE_COUNT) {
+            xChatMessageView.scrollToBottom();
+            xChatMessageView.setIsNeedHeaderLoadMore(true);
+            xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onHeaderLoadMore() {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(500);
+                                final ArrayList<Message> messageArrayList = getDataFromLocal();
+                                xChatMessageView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (messageArrayList.size() < PAGE_COUNT)
+                                            xChatMessageView.setIsNeedHeaderLoadMore(false);
+                                        xChatMessageView.addMoreMessageAtFirst(messageArrayList);
+                                    }
+                                });
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+
+                @Override
+                public void onFooterLoadMore() {
+                }
+            });
+        }
+    }
+
+    private void addListeners() {
+        buttonRecvImg.setOnClickListener(this);
+        buttonSendImg.setOnClickListener(this);
+        buttonRecvText.setOnClickListener(this);
+        buttonSendText.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_recv_img:
+                xChatMessageView.addMessageAtLast(new Message(true, "", Message.TYPE_IMG));
+                break;
+            case R.id.btn_send_img:
+                xChatMessageView.addMessageAtLast(new Message(false, "", Message.TYPE_IMG));
+                break;
+            case R.id.btn_send_text:
+                xChatMessageView.addMessageAtLast(new Message(false, "send text", Message.TYPE_TEXT));
+                break;
+            case R.id.btn_recv_text:
+                xChatMessageView.addMessageAtLast(new Message(true, "recv text", Message.TYPE_TEXT));
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        xChatMessageView.reomveMessage(event.getItemView());
+    }
+
+    private ArrayList<Message> getDataFromLocal() {
+        if (!localDatas.isEmpty()) {
+            ArrayList<Message> messageArrayList = new ArrayList<>();
+            for (currentPosition = lastPosition; currentPosition < localDatas.size() && currentPosition - lastPosition < PAGE_COUNT; currentPosition++) {
+                messageArrayList.add(localDatas.get(currentPosition));
+            }
+            lastPosition = mDatas.size();
+            return messageArrayList;
+        } else {
+            return new ArrayList<>();
         }
     }
 }

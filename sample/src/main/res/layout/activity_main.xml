@@ -1,19 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_main"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="发送"/>
 
-    <me.kaneki.xchatmessageview.base.XChatMessageView
-        android:id="@+id/xcmv_view"
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_height="55dp">
+
+        <Button
+            android:id="@+id/btn_recv_img"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="收到图片"/>
+
+        <Button
+            android:id="@+id/btn_recv_text"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="收到文字"/>
+
+        <Button
+            android:id="@+id/btn_send_img"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发送图片"/>
+
+        <Button
+            android:id="@+id/btn_send_text"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发送文字"/>
+
+    </LinearLayout>
+
+    <me.kaneki.xchatmessageview.XChatMessageView
+        android:id="@+id/xcmv_home"
+        android:layout_above="@id/ll_bottom"
         android:background="#333333"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</LinearLayout>
+
+
+
+</RelativeLayout>
