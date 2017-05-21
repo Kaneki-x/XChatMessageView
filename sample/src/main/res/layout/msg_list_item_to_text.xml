@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rl_msg_list_item_text_to"
-                android:paddingBottom="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+    android:id="@+id/rl_msg_list_item_text_to"
+    android:paddingBottom="8dp"
+    android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
 
     <TextView
         android:id="@+id/tv_msg_list_item_text_to_date"
@@ -15,7 +16,6 @@
         android:text="2014-02-21"
         android:textColor="#b2b2b2"
         android:textSize="12dp" />
-
 
     <ImageView
         android:id="@+id/riv_msg_list_item_text_to_portrait"
@@ -46,7 +46,7 @@
             android:lineSpacingExtra="3dp"
             android:layout_alignParentRight="true"
             android:descendantFocusability="blocksDescendants"
-            android:text="你好"
+            android:text=""
             android:maxWidth="228dip"
             android:minWidth="20dp"
             android:paddingTop="10dp"

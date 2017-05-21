@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        SharedPreferencesUtils.setParam(this, "data", gson.toJson(mDatas));
+        SharedPreferencesUtils.setParam(this, "data", gson.toJson(localDatas));
     }
 
     private void initLocalData() {
@@ -103,12 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             try {
+                                //模拟加载
                                 Thread.sleep(500);
                                 final ArrayList<Message> messageArrayList = getDataFromLocal();
                                 xChatMessageView.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (messageArrayList.size() < PAGE_COUNT)
+                                        if (messageArrayList.isEmpty())
                                             xChatMessageView.setIsNeedHeaderLoadMore(false);
                                         xChatMessageView.addMoreMessageAtFirst(messageArrayList);
                                     }
@@ -138,16 +139,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_recv_img:
-                xChatMessageView.addMessageAtLast(new Message(true, "", Message.TYPE_IMG));
+                Message message = new Message(true, "", Message.TYPE_IMG);
+                localDatas.add(0, message);
+                xChatMessageView.addMessageAtLast(message);
                 break;
             case R.id.btn_send_img:
-                xChatMessageView.addMessageAtLast(new Message(false, "", Message.TYPE_IMG));
+                message = new Message(false, "", Message.TYPE_IMG);
+                localDatas.add(0, message);
+                xChatMessageView.addMessageAtLast(message);
                 break;
             case R.id.btn_send_text:
-                xChatMessageView.addMessageAtLast(new Message(false, "send text", Message.TYPE_TEXT));
+                message = new Message(false, "send text", Message.TYPE_TEXT);
+                localDatas.add(0, message);
+                xChatMessageView.addMessageAtLast(message);
                 break;
             case R.id.btn_recv_text:
-                xChatMessageView.addMessageAtLast(new Message(true, "recv text", Message.TYPE_TEXT));
+                message = new Message(true, "recv text", Message.TYPE_TEXT);
+                localDatas.add(0, message);
+                xChatMessageView.addMessageAtLast(message);
                 break;
         }
     }

@@ -1,7 +1,6 @@
 package me.kaneki.xchatmessageview;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -20,8 +19,6 @@ import java.util.List;
  * @email yueqian@mogujie.com
  */
 public class XChatMessageView<T> extends ViewGroup {
-
-    private static final String DEFAULT_BACKGROUND_COLOR = "#f5f5f5";
 
     private Context context;
     private RecyclerView recyclerView;
@@ -137,7 +134,6 @@ public class XChatMessageView<T> extends ViewGroup {
         recyclerView = (RecyclerView) LayoutInflater.from(getContext()).inflate(
                 R.layout.x_recycler_view, this, false);
         recyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.MATCH_PARENT));
-        recyclerView.setBackgroundColor(Color.parseColor(DEFAULT_BACKGROUND_COLOR));
         linearLayoutManager = new XLinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);

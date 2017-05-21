@@ -14,6 +14,7 @@
 
         <Button
             android:id="@+id/btn_recv_img"
+            android:layout_margin="1dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
         <Button
             android:id="@+id/btn_recv_text"
             android:layout_weight="1"
+            android:layout_margin="1dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="收到文字"/>
@@ -29,6 +31,7 @@
         <Button
             android:id="@+id/btn_send_img"
             android:layout_weight="1"
+            android:layout_margin="1dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="发送图片"/>
@@ -36,6 +39,7 @@
         <Button
             android:id="@+id/btn_send_text"
             android:layout_weight="1"
+            android:layout_margin="1dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="发送文字"/>
@@ -45,10 +49,8 @@
     <me.kaneki.xchatmessageview.XChatMessageView
         android:id="@+id/xcmv_home"
         android:layout_above="@id/ll_bottom"
-        android:background="#333333"
+        android:background="#f5f5f5"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
 
 </RelativeLayout>

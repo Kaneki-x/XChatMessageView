@@ -20,7 +20,6 @@ import android.util.TypedValue;
 
 import me.kaneki.sample.R;
 
-
 /**
  * @author yueqian
  * @Desctription

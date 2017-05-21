@@ -2,7 +2,6 @@ package me.kaneki.sample.holder;
 
 import android.content.DialogInterface;
 import android.view.View;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 

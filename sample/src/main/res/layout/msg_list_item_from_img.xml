@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_msg_list_item_img_from"
+    android:background="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
@@ -46,5 +47,4 @@
         app:bubble_arrowTop="12dp"
         app:bubble_arrowWidth="6dp"
         />
-
 </RelativeLayout>
