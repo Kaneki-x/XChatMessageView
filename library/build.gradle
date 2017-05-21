@@ -40,7 +40,7 @@ dependencies {
 }
 
 // 项目引用的版本号，比如compile 'com.kaneki.xchatmessageview:library:0.0.1'中的0.0.1就是这里配置的。
-version = "0.0.1"
+version = "0.0.2"
 
 // 定义两个链接，下面会用到。
 def siteUrl = 'https://github.com/echohaha/XChatMessageView' // 项目主页。
