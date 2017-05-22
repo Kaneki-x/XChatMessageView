@@ -164,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         xChatMessageView.reomveMessage(event.getItemView());
+
+        localDatas.remove(event.getMessage());
     }
 
     private ArrayList<Message> getDataFromLocal() {

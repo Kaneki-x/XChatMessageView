@@ -1,6 +1,7 @@
 package me.kaneki.xchatmessageview;
 
 import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -301,8 +302,15 @@ public class XChatMessageView<T> extends ViewGroup {
     /**
      * resume the XChatMessageView's saved status.
      */
-    public void resumeSaveStatus() {
-        resumeSave(0);
+    public void resumeSaveStatus(int changeSize) {
+        resumeSave(changeSize);
+    }
+
+    /**
+     * set the message item animator
+     */
+    public void setMessageAnimator(RecyclerView.ItemAnimator itemAnimator) {
+        recyclerView.setItemAnimator(itemAnimator);
     }
 
 }

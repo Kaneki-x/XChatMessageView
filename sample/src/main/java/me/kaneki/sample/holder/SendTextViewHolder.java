@@ -20,26 +20,28 @@ import me.kaneki.xchatmessageview.holder.XViewHolder;
  */
 public class SendTextViewHolder extends XViewHolder<Message> {
     private TextView textView;
+    private View itemView;
 
     public SendTextViewHolder(final View itemView) {
         super(itemView);
+        this.itemView = itemView;
         textView = (TextView) itemView.findViewById(R.id.tv_msg_list_item_text_to_content);
+    }
+
+    @Override
+    public void bindView(final Message message) {
+        textView.setText(message.getContent());
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 DialogUtils.getDeleteDialog(itemView.getContext(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EventBus.getDefault().post(new MessageEvent(itemView));
+                        EventBus.getDefault().post(new MessageEvent(message, itemView));
                     }
                 }).show();
                 return true;
             }
         });
-    }
-
-    @Override
-    public void bindView(Message message) {
-        textView.setText(message.getContent());
     }
 }
