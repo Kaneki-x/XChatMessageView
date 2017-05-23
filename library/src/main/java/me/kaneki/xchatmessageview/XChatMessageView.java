@@ -67,25 +67,6 @@ public class XChatMessageView<T> extends ViewGroup {
         int widthSize = MeasureSpec.getSize(pWidthMeasureSpec);// 得到尺寸
 
         switch (widthMode) {
-            /**
-             * mode共有三种情况，取值分别为MeasureSpec.UNSPECIFIED, MeasureSpec.EXACTLY,
-             * MeasureSpec.AT_MOST。
-             *
-             *
-             * MeasureSpec.EXACTLY是精确尺寸，
-             * 当我们将控件的layout_width或layout_height指定为具体数值时如andorid
-             * :layout_width="50dip"，或者为FILL_PARENT是，都是控件大小已经确定的情况，都是精确尺寸。
-             *
-             *
-             * MeasureSpec.AT_MOST是最大尺寸，
-             * 当控件的layout_width或layout_height指定为WRAP_CONTENT时
-             * ，控件大小一般随着控件的子空间或内容进行变化，此时控件尺寸只要不超过父控件允许的最大尺寸即可
-             * 。因此，此时的mode是AT_MOST，size给出了父控件允许的最大尺寸。
-             *
-             *
-             * MeasureSpec.UNSPECIFIED是未指定尺寸，这种情况不多，一般都是父控件是AdapterView，
-             * 通过measure方法传入的模式。
-             */
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
             case MeasureSpec.EXACTLY:
@@ -186,7 +167,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * set message adapter, the adpter should extend XMessageAdapter.
-     * @param messageAdapter
+     * @param messageAdapter the adapter to
      */
     public void setMessageAdapter(XMessageAdapter messageAdapter) {
         this.messageAdpter = messageAdapter;
@@ -196,7 +177,7 @@ public class XChatMessageView<T> extends ViewGroup {
     /**
      * set message load more listener, it calls when the header is visibile and only
      * calls once when trigger.
-     * @param onLoadMoreListener
+     * @param onLoadMoreListener the load more listener
      */
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
@@ -204,7 +185,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * get message adpater, it may return null if setMessageAdapter method whit null set.
-     * @return
+     * @return the set adapter
      */
     public RecyclerView.Adapter getMessageAdpter() {
         return messageAdpter;
@@ -212,7 +193,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * toggle the load more header, it should be call before the datas change.
-     * @param isNeedHeaderLoadMore
+     * @param isNeedHeaderLoadMore toggle need header load more
      */
     public void setIsNeedHeaderLoadMore(boolean isNeedHeaderLoadMore) {
         messageAdpter.setNeedHeaderLoadMore(isNeedHeaderLoadMore);
@@ -220,7 +201,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * toggle the load more footer, it should be call before the datas change.
-     * @param isNeedFooterLoadMore
+     * @param isNeedFooterLoadMore toggle need footer load more
      */
     public void setIsNeedFooterLoadMore(boolean isNeedFooterLoadMore) {
         messageAdpter.setNeedFooterLoadMore(isNeedFooterLoadMore);
@@ -228,7 +209,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * return the view's position on the XChatMessageView, the view should come from the XViewHolder.
-     * @param view
+     * @param view view in the list
      * @return
      */
     public int getMessageItemPosition(View view) {
@@ -238,7 +219,7 @@ public class XChatMessageView<T> extends ViewGroup {
     /**
      * add a new message at the last of the XChatMessageView, the message should as same as the T of the
      * XViewHolder or XMessageAdapter.
-     * @param t
+     * @param t the T add at the first
      */
     @SuppressWarnings("unchecked")
     public void addMessageAtLast(T t) {
@@ -249,7 +230,7 @@ public class XChatMessageView<T> extends ViewGroup {
     /**
      * add messages at the last of the XChatMessageView, the message should as same as the T of the
      * XViewHolder or XMessageAdapter.
-     * @param tList
+     * @param tList the list to add at last
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtLast(List<T> tList) {
@@ -260,7 +241,7 @@ public class XChatMessageView<T> extends ViewGroup {
     /**
      * add messages at the first of the XChatMessageView, the message should as same as the T of the
      * XViewHolder or XMessageAdapter.
-     * @param tList
+     * @param tList thet list to add at firsh
      */
     @SuppressWarnings("unchecked")
     public void addMoreMessageAtFirst(List<T> tList) {
@@ -270,8 +251,8 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     /**
-     * remove the message on the XChatMessageView, the view should come from the XViewHolder callback.
-     * @param view
+     * remove the message on the XChatMessageView,
+     * @param view view in the list whichshould come from the XViewHolder callback.
      */
     public void reomveMessage(View view) {
         int position = linearLayoutManager.getPosition(view);
@@ -301,6 +282,7 @@ public class XChatMessageView<T> extends ViewGroup {
 
     /**
      * resume the XChatMessageView's saved status.
+     * @param changeSize the data change size
      */
     public void resumeSaveStatus(int changeSize) {
         resumeSave(changeSize);
