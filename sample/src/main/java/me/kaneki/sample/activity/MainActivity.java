@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int PAGE_COUNT = 10;
 
-    private int currentPosition;
     private int lastPosition;
 
     private XChatMessageView<Message> xChatMessageView;
@@ -80,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDatas.addAll(getDataFromLocal());
     }
 
+    @SuppressWarnings("unchecked")
     private void initView() {
         xChatMessageView = (XChatMessageView) findViewById(R.id.xcmv_home);
         buttonRecvImg = (Button) findViewById(R.id.btn_recv_img);
@@ -137,28 +137,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Message message;
         switch (v.getId()) {
             case R.id.btn_recv_img:
-                Message message = new Message(true, "", Message.TYPE_IMG);
-                localDatas.add(0, message);
-                xChatMessageView.addMessageAtLast(message);
+                message = new Message(true, "", Message.TYPE_IMG);
                 break;
             case R.id.btn_send_img:
                 message = new Message(false, "", Message.TYPE_IMG);
-                localDatas.add(0, message);
-                xChatMessageView.addMessageAtLast(message);
                 break;
             case R.id.btn_send_text:
                 message = new Message(false, "send text", Message.TYPE_TEXT);
-                localDatas.add(0, message);
-                xChatMessageView.addMessageAtLast(message);
                 break;
             case R.id.btn_recv_text:
                 message = new Message(true, "recv text", Message.TYPE_TEXT);
-                localDatas.add(0, message);
-                xChatMessageView.addMessageAtLast(message);
                 break;
+            default:
+                message = new Message(false, "error", Message.TYPE_TEXT);
         }
+        localDatas.add(0, message);
+        xChatMessageView.addMessageAtLast(message);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -171,8 +168,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Message> getDataFromLocal() {
         if (!localDatas.isEmpty()) {
             ArrayList<Message> messageArrayList = new ArrayList<>();
-            for (currentPosition = lastPosition; currentPosition < localDatas.size() && currentPosition - lastPosition < PAGE_COUNT; currentPosition++) {
-                messageArrayList.add(localDatas.get(currentPosition));
+            for (int i = lastPosition; i < localDatas.size() && i - lastPosition < PAGE_COUNT; i++) {
+                messageArrayList.add(localDatas.get(i));
             }
             lastPosition = mDatas.size();
             return messageArrayList;
