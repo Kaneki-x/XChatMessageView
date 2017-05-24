@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (localDatas == null)
             localDatas = new ArrayList<>();
 
+        lastPosition = localDatas.size() - 1;
         mDatas.addAll(getDataFromLocal());
     }
 
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 message = new Message(false, "error", Message.TYPE_TEXT);
         }
-        localDatas.add(0, message);
+        localDatas.add(message);
         xChatMessageView.addMessageAtLast(message);
     }
 
@@ -168,10 +169,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<Message> getDataFromLocal() {
         if (!localDatas.isEmpty()) {
             ArrayList<Message> messageArrayList = new ArrayList<>();
-            for (int i = lastPosition; i < localDatas.size() && i - lastPosition < PAGE_COUNT; i++) {
-                messageArrayList.add(localDatas.get(i));
+            for (int i = lastPosition; i >= 0 && lastPosition - i < PAGE_COUNT; i--) {
+                messageArrayList.add(0, localDatas.get(i));
             }
-            lastPosition = mDatas.size();
+            lastPosition = lastPosition - messageArrayList.size();
             return messageArrayList;
         } else {
             return new ArrayList<>();
