@@ -267,6 +267,22 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     /**
+     * refresh the view in ther recycler view
+     * @param view
+     */
+    public void refreshMessage(View view) {
+        int position = linearLayoutManager.getPosition(view);
+        messageAdpter.refreshMessageAtPos(position);
+    }
+
+    /**
+     * refresh all items
+     */
+    public void refreshAllMessage() {
+        messageAdpter.refreshAllMessage();
+    }
+
+    /**
      * scroll to the bottom of the XChatMessageView.
      */
     public void scrollToBottom() {

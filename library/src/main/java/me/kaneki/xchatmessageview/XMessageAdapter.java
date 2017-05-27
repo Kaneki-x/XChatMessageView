@@ -104,6 +104,14 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
         notifyDataSetChanged();
     }
 
+    void refreshMessageAtPos(int pos) {
+        notifyItemChanged(pos);
+    }
+
+    void refreshAllMessage() {
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if (isNeedHeaderLoadMore && position == 0)
