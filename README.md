@@ -23,12 +23,38 @@ dependencies {
 ```
 
 ### Layout
+
+set XChatMessageView in xml is as same as simple ViewGroup.
      
-todo
+```xml
+	<me.kaneki.xchatmessageview.XChatMessageView
+        android:id="@+id/xcmv_home"
+        android:background="#f5f5f5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+```
 
 ### Java
 
-todo
+#### 1.init
+you can set Adpater and some attributes about the XChatMessageView after `findViewById`
+
+```java
+	xChatMessageView.setMessageAdapter(sampleAdapter);
+	xChatMessageView.setIsNeedFooterLoadMore(false);
+	xChatMessageView.setIsNeedHeaderLoadMore(true);
+	xChatMessageView.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onHeaderLoadMore() {
+                                    }
+
+                @Override
+                public void onFooterLoadMore() {
+                }
+            });
+
+```
 
 ## Customization
 
@@ -39,7 +65,7 @@ todo
 
 ### 0.0.2（2017-05-24）
 - fix the crash of recycler view during layout
-- add some new interface
+- add some new interface about refresh item
 
 ### 0.0.1（2017-05-21）
 - library first build
