@@ -38,7 +38,7 @@ set XChatMessageView in xml is as same as simple ViewGroup.
 ### Java
 
 #### 1.init
-you can set Adpater and some attributes about the XChatMessageView after `findViewById`
+you can set adapter and some attributes after `findViewById`
 
 ```java
 	xChatMessageView.setMessageAdapter(sampleAdapter);
