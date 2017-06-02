@@ -24,7 +24,7 @@ dependencies {
 
 ### Layout
 
-set XChatMessageView in xml is as same as simple ViewGroup.
+Set XChatMessageView in xml is as same as simple ViewGroup.
      
 ```xml
 	<me.kaneki.xchatmessageview.XChatMessageView
@@ -38,7 +38,7 @@ set XChatMessageView in xml is as same as simple ViewGroup.
 ### Java
 
 #### 1.init
-you can set adapter and some attributes after `findViewById`
+You can set adapter and some attributes after `findViewById`
 
 ```java
 	xChatMessageView.setMessageAdapter(sampleAdapter);
