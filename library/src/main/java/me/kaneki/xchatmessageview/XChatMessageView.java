@@ -184,7 +184,7 @@ public class XChatMessageView<T> extends ViewGroup {
     }
 
     /**
-     * get message adpater, it may return null if setMessageAdapter method whit null set.
+     * get message adpater, it may return null if setMessageAdapter method with null set.
      * @return the set adapter
      */
     public RecyclerView.Adapter getMessageAdpter() {

@@ -37,10 +37,80 @@ Set XChatMessageView in xml is as same as simple ViewGroup.
 
 ### Java
 
-#### 1.init
+#### 1. construct your Apdater and ViewHolder
+Your adpater and holder must extends `XMessageAdapter` and `XViewHolder`, such as the sample code.
+
+```java
+@XItemLayoutRes({
+        R.layout.msg_list_item_to_text,
+        R.layout.msg_list_item_from_text,
+        R.layout.msg_list_item_to_img,
+        R.layout.msg_list_item_from_img
+})
+public class SampleAdapter extends XMessageAdapter<Message> {
+
+    public SampleAdapter(Context context, ArrayList<Message> mDatas) {
+        super(context, mDatas);
+    }
+
+    @Override
+    public int getItemViewType(Message message) {
+        switch (message.getType()) {
+            case Message.TYPE_TEXT:
+                return message.isFrom() ? 1 : 0;
+            case Message.TYPE_IMG:
+                return message.isFrom() ? 3 : 2;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    public XViewHolder<Message> getViewHolder(View itemView, int viewType) {
+        switch (viewType) {
+            case 0:
+                return new SendTextViewHolder(itemView);
+            case 1:
+                return new ReceiveTextViewHolder(itemView);
+            case 2:
+                return new SendImageViewHolder(itemView);
+            case 3:
+                return new ReceiveImageViewHolder(itemView);
+            default:
+                return null;
+        }
+    }
+}
+```
+
+**Notirce:**
+The generic `Message` is desigin by your self, the method `getItemViewType` return index must associated with the layout res position in `@XItemLayoutRes` annotations, it begin from position zero. You can according to the properties in the message to return the layout res position to distinguish.
+
+```java
+public class SampleViewHolder extends XViewHolder<Message> {
+
+    public ReceiveImageViewHolder(View itemView) {
+        super(itemView);
+        
+        //findViewById by itemView
+    }
+
+    @Override
+    public void bindView(Message message) {
+    	//set view by message
+    }
+}
+
+```
+
+**Notice:**
+You need to make sure that the itemView associated with the layout in `@XItemLayoutRes`. Otherwise `findViewById` may get problem.
+
+#### 2.init Attributes
 You can set adapter and some attributes after `findViewById`
 
 ```java
+	SampleAdapter sampleAdapter = new SampleAdapter(context, mDatas);
 	xChatMessageView.setMessageAdapter(sampleAdapter);
 	xChatMessageView.setIsNeedFooterLoadMore(false);
 	xChatMessageView.setIsNeedHeaderLoadMore(true);
@@ -53,13 +123,102 @@ You can set adapter and some attributes after `findViewById`
                 public void onFooterLoadMore() {
                 }
             });
-
 ```
+**Notice:**
+`setIsNeedFooterLoadMore` and `setIsNeedHeaderLoadMore` should be used before the Message datas change. Otherwise it will take effect after the interface at the next data changed refresh.
 
-## Customization
+#### 3.API
 
-todo
- 
+```java
+	/**
+     * set message adapter, the adpter should extends XMessageAdapter.
+     */
+    public void setMessageAdapter(XMessageAdapter messageAdapter);
+
+    /**
+     * set message load more listener, it calls when the header is visibile and only
+     * calls once when trigger.
+     */
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
+
+    /**
+     * get message adpater, it may return null if setMessageAdapter method with null set.
+     */
+    public XMessageApdater getMessageAdpter();
+
+    /**
+     * toggle the load more header, it should be call before the datas change.
+     */
+    public void setIsNeedHeaderLoadMore(boolean isNeedHeaderLoadMore);
+
+    /**
+     * toggle the load more footer, it should be call before the datas change.
+     */
+    public void setIsNeedFooterLoadMore(boolean isNeedFooterLoadMore);
+
+    /**
+     * return the view's position on the XChatMessageView, the param view must come from the XViewHolder.
+     */
+    public int getMessageItemPosition(View view);
+
+    /**
+     * add a new message at the last of the XChatMessageView, the message should as same as the T of the
+     * XViewHolder or XMessageAdapter.
+     */
+    public void addMessageAtLast(T t);
+
+    /**
+     * add messages at the last of the XChatMessageView, the message should as same as the T of the
+     * XViewHolder or XMessageAdapter.
+     */
+    public void addMoreMessageAtLast(List<T> tList);
+    
+    /**
+     * add messages at the first of the XChatMessageView, the message should as same as the T of the
+     * XViewHolder or XMessageAdapter.
+     */
+    public void addMoreMessageAtFirst(List<T> tList);
+
+    /**
+     * remove the message on the XChatMessageView.
+     */
+    public void reomveMessage(View view);
+
+    /**
+     * remove all the message on the XChatMessageView.
+     */
+    public void removeAllMessage();
+
+    /**
+     * refresh the view in ther recycler view
+     */
+    public void refreshMessage(View view);
+
+    /**
+     * refresh all items.
+     */
+    public void refreshAllMessage();
+
+    /**
+     * scroll to the bottom of the XChatMessageView.
+     */
+    public void scrollToBottom();
+
+    /**
+     * save the XChatMessageView current status, you can resume the status whenever you need.
+     */
+    public void saveCurrentStatus();
+
+    /**
+     * resume the XChatMessageView's saved status.
+     */
+    public void resumeSaveStatus(int changeSize);
+
+    /**
+     * set the message item update animator.
+     */
+    public void setMessageAnimator(RecyclerView.ItemAnimator itemAnimator);
+```
 
 ## Change Log
 
