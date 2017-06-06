@@ -28,10 +28,10 @@ Set XChatMessageView in xml is as same as simple ViewGroup.
      
 ```xml
 	<me.kaneki.xchatmessageview.XChatMessageView
-        android:id="@+id/xcmv_home"
-        android:background="#f5f5f5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        	android:id="@+id/xcmv_home"
+        	android:background="#f5f5f5"
+        	android:layout_width="match_parent"
+        	android:layout_height="match_parent" />
 
 ```
 
@@ -107,7 +107,7 @@ public class SampleViewHolder extends XViewHolder<Message> {
 You need to make sure that the itemView associated with the layout in `@XItemLayoutRes`. Otherwise `findViewById` may get problem.
 
 #### 2.init Attributes
-You can set adapter and some attributes after `findViewById`
+You can set adapter and attributes after `findViewById`.
 
 ```java
 	SampleAdapter sampleAdapter = new SampleAdapter(context, mDatas);
@@ -130,6 +130,7 @@ You can set adapter and some attributes after `findViewById`
 #### 3.API
 
 ```java
+
 	/**
      * set message adapter, the adpter should extends XMessageAdapter.
      */
