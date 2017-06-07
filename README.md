@@ -24,7 +24,7 @@ dependencies {
 
 ### Layout
 
-Set XChatMessageView in xml is as same as simple ViewGroup.
+Set `XChatMessageView` in xml is as same as simple ViewGroup. Subsequent versions will provide custom attribute set.
      
 ```xml
 	<me.kaneki.xchatmessageview.XChatMessageView
