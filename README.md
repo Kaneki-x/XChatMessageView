@@ -27,12 +27,11 @@ dependencies {
 Set `XChatMessageView` in xml is as same as simple ViewGroup. Subsequent versions will provide custom attribute set.
      
 ```xml
-	<me.kaneki.xchatmessageview.XChatMessageView
-        	android:id="@+id/xcmv_home"
-        	android:background="#f5f5f5"
-        	android:layout_width="match_parent"
-        	android:layout_height="match_parent" />
-
+<me.kaneki.xchatmessageview.XChatMessageView
+	android:id="@+id/xcmv_home"
+	android:background="#f5f5f5"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" />
 ```
 
 ### Java
