@@ -25,7 +25,7 @@ dependencies {
 ### Layout
 
 Set `XChatMessageView` in xml is as same as simple ViewGroup. Subsequent versions will provide custom attribute set.
-     
+
 ```xml
 <me.kaneki.xchatmessageview.XChatMessageView
 	android:id="@+id/xcmv_home"
@@ -36,8 +36,8 @@ Set `XChatMessageView` in xml is as same as simple ViewGroup. Subsequent version
 
 ### Java
 
-#### 1. construct your Apdater and ViewHolder
-Your adpater and holder must extends `XMessageAdapter` and `XViewHolder`, such as the sample code.
+#### 1. construct your Adapter and ViewHolder
+Your adapter and holder must extends `XMessageAdapter` and `XViewHolder`, such as the sample code.
 
 ```java
 @XItemLayoutRes({
@@ -82,15 +82,15 @@ public class SampleAdapter extends XMessageAdapter<Message> {
 }
 ```
 
-**Notirce:**
-The generic `Message` is desigin by your self, the method `getItemViewType` return index must associated with the layout res position in `@XItemLayoutRes` annotations, it begin from position zero. You can according to the properties in the message to return the layout res position to distinguish.
+**Notice:**
+The generic `Message` is design by your self, the method `getItemViewType` return index must associated with the layout res position in `@XItemLayoutRes` annotations, it begin from position zero. You can according to the properties in the message to return the layout res position to distinguish.
 
 ```java
 public class SampleViewHolder extends XViewHolder<Message> {
 
     public ReceiveImageViewHolder(View itemView) {
         super(itemView);
-        
+
         //findViewById by itemView
     }
 
@@ -131,20 +131,20 @@ You can set adapter and attributes after `findViewById`.
 ```java
 
 	/**
-     * set message adapter, the adpter should extends XMessageAdapter.
+     * set message adapter, the adapter should extends XMessageAdapter.
      */
     public void setMessageAdapter(XMessageAdapter messageAdapter);
 
     /**
-     * set message load more listener, it calls when the header is visibile and only
+     * set message load more listener, it calls when the header is visible and only
      * calls once when trigger.
      */
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
 
     /**
-     * get message adpater, it may return null if setMessageAdapter method with null set.
+     * get message adapter, it may return null if setMessageAdapter method with null set.
      */
-    public XMessageApdater getMessageAdpter();
+    public XMessageApdater getMessageAdapter();
 
     /**
      * toggle the load more header, it should be call before the datas change.
@@ -172,7 +172,7 @@ You can set adapter and attributes after `findViewById`.
      * XViewHolder or XMessageAdapter.
      */
     public void addMoreMessageAtLast(List<T> tList);
-    
+
     /**
      * add messages at the first of the XChatMessageView, the message should as same as the T of the
      * XViewHolder or XMessageAdapter.
@@ -182,7 +182,7 @@ You can set adapter and attributes after `findViewById`.
     /**
      * remove the message on the XChatMessageView.
      */
-    public void reomveMessage(View view);
+    public void removeMessage(View view);
 
     /**
      * remove all the message on the XChatMessageView.
@@ -190,7 +190,7 @@ You can set adapter and attributes after `findViewById`.
     public void removeAllMessage();
 
     /**
-     * refresh the view in ther recycler view
+     * refresh the view in the recycler view
      */
     public void refreshMessage(View view);
 
