@@ -103,7 +103,7 @@ public class SampleViewHolder extends XViewHolder<Message> {
 ```
 
 **Notice:**
-You need to make sure that the itemView associated with the layout in `@XItemLayoutRes`. Otherwise `findViewById` may get problem.
+You need to make sure that the `itemView` associated with the layout in `@XItemLayoutRes`. Otherwise `findViewById` may get problem.
 
 #### 2.init Attributes
 You can set adapter and attributes after `findViewById`.
@@ -130,7 +130,7 @@ You can set adapter and attributes after `findViewById`.
 
 ```java
 
-	/**
+    /**
      * set message adapter, the adapter should extends XMessageAdapter.
      */
     public void setMessageAdapter(XMessageAdapter messageAdapter);
