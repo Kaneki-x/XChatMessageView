@@ -14,7 +14,7 @@
 
 ### Dependency
 
-Include the library as local library project or add the dependency in your build.gradle.
+Include the library as local library project or add the dependency in your `build.gradle`.
 
 ```groovy
 dependencies {
