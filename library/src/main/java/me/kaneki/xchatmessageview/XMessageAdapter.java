@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import me.kaneki.xchatmessageview.anno.XItemLayoutResResolver;
-import me.kaneki.xchatmessageview.holder.XMoreHolder;
 import me.kaneki.xchatmessageview.holder.XViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,19 +19,19 @@ import java.util.List;
  */
 public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolder<T>> {
 
-    private static final int TYPE_LOADING_HEADER = 1000;
-    private static final int TYPE_LOADING_FOOTER = 1001;
+    public static final int TYPE_LOADING_HEADER = 1000;
+    public static final int TYPE_LOADING_FOOTER = 1001;
 
     private LayoutInflater layoutInflater;
 
-    private ArrayList<T> mDatas;
+    private List<T> mDatas;
     private int[] mIds;
     private int headerLayoutId;
     private int footerLayoutId;
     private boolean isNeedHeaderLoadMore;
     private boolean isNeedFooterLoadMore;
 
-    public XMessageAdapter (Context context, ArrayList<T> mDatas) {
+    public XMessageAdapter (Context context, List<T> mDatas) {
         this.mDatas = mDatas;
         this.mIds = XItemLayoutResResolver.resolve(this);
         this.layoutInflater = LayoutInflater.from(context);
@@ -127,23 +125,7 @@ public abstract class XMessageAdapter<T> extends RecyclerView.Adapter<XViewHolde
     @Override
     @SuppressWarnings("unchecked")
     public XViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_LOADING_HEADER) {
-            return (XViewHolder<T>) new XMoreHolder(layoutInflater.inflate(headerLayoutId, parent, false)) {
-                @Override
-                public void bindMoreView(Object object) {
-
-                }
-            };
-        } else if (viewType == TYPE_LOADING_FOOTER) {
-            return (XViewHolder<T>) new XMoreHolder(layoutInflater.inflate(footerLayoutId, parent, false)) {
-                @Override
-                public void bindMoreView(Object object) {
-
-                }
-            };
-        } else {
-            return getViewHolder(layoutInflater.inflate(mIds[viewType], parent, false), viewType);
-        }
+        return getViewHolder((viewType == TYPE_LOADING_FOOTER || viewType == TYPE_LOADING_HEADER) ? layoutInflater.inflate(viewType == TYPE_LOADING_FOOTER ? footerLayoutId : headerLayoutId, parent, false) : layoutInflater.inflate(mIds[viewType], parent, false), viewType);
     }
 
     @Override
