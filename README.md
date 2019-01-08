@@ -18,7 +18,7 @@ Include the library as local library project or add the dependency in your `buil
 
 ```groovy
 dependencies {
-    compile 'me.kankei.xchatmessageview:library:0.0.2'
+    compile 'me.kaneki.xchatmessageview:library:0.0.2'
 }
 ```
 
